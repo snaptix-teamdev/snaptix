@@ -1,7 +1,7 @@
 import styles from './Recaptcha.module.scss'
 import { RecaptchaProps } from '@/src/shared/ui/recaptcha/Recaptcha.types'
-import { CheckedIcon } from '@/src/shared/ui/SVG/CheckedIcon'
-import { RecaptchaLogo } from '@/src/shared/ui/SVG/RecaptchaLogo'
+import { CheckedIcon } from '@/src/shared/ui/svg/CheckedIcon'
+import { RecaptchaLogo } from '@/src/shared/ui/svg/RecaptchaLogo'
 
 const errorMessage = 'Please verify that you are not a robot'
 const expiredMessage = 'Verification expired. Check the checkbox' + 'again.'

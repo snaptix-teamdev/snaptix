@@ -1,6 +1,6 @@
 'use client'
 import { Input } from '@/src/shared/ui/Input/Input'
-import { EyeIcon } from '@/src/shared/ui/SVG/Icon'
+import { EyeIcon } from '@/src/shared/ui/svg/Icon'
 import { Button } from '@/src/shared/ui/Button/Button'
 import s from './Form.module.css'
 
