@@ -1,5 +1,5 @@
 export type ConfirmEmailRequestDto = {
-  confirmationCode: string
+  code: string
 }
 
 export type ConfirmEmailResponseDto = {
