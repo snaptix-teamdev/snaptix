@@ -1,8 +1,8 @@
 .wrapper {
-    margin-top: 36px;
+    margin-top: var(--presmall-indent);
     display: flex;
     flex-direction: column;
-    gap: 48px;
+    gap: var(--medium-large-indent);
 }
 
 .userInfoWrapper {
@@ -19,7 +19,15 @@
 .userInfo {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: var(--smaller-indent);
+}
+
+.aboutUser {
+    margin-top: 8px;
+    font-weight: var(--weight-regular);
+    font-size: var(--h3-text-size);
+    line-height: var(--small-indent);
+    letter-spacing: 0;
 }
 
 .userNameWrapper {
@@ -29,42 +37,45 @@
 
 .paidAccountWrapper {
     display: flex;
-    gap: 12px;
+    align-items: center;
+    gap: var(--semithin-indent);
+    font-weight: var(--weight-bold);
+    font-size: var(--page-text-size);
+    line-height: var(--presmall-indent);
+    vertical-align: middle;
 }
 
 .subscriptionsWrapper {
     display: flex;
-    gap: 100px;
+    gap: var(--extralarge-indent);
 }
 
 .subscriptions {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    font-size: 14px;
+    font-size: var(--small-text-size);
 }
 
 .quantity {
-    font-weight: 700;
+    font-weight: var(--weight-bold);
     cursor: pointer;
 }
 
 .followers {
-    font-weight: 400;
+    font-weight: var(--weight-regular);
     cursor: pointer;
 }
 
 .posts {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: var(--semithin-indent);
 }
-
-
 
 .container {
     width: 644px;
-    padding: 24px;
+    padding: var(--small-indent);
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -73,10 +84,10 @@
 
 .search {
     width: 100%;
-    padding: 6px 12px;
-    background-color: #333;
-    color: #8D9094;
-    border: 1px solid #4C4C4C;
+    padding: var(--thin-indent) var(--semithin-indent);
+    background-color: var(--color-dark-300);
+    color: var(--color-light-900);
+    border: 1px solid var(--color-dark-100);
     flex-shrink: 0;
 }
 
@@ -88,7 +99,7 @@
 }
 
 .followersList {
-    margin-top: 24px;
+    margin-top: var(--small-indent);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -97,7 +108,7 @@
 .imgNameFollowerWrapper {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: var(--semithin-indent);
 }
 
 .imgFollower {

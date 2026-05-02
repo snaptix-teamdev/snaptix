@@ -20,7 +20,7 @@ export const Sidebar = ({ children }: SidebarProps) => {
 
 const NavItem = ({ href, className, icon, activeIcon, onClick, disabled, children }: SidebarItemProps) => {
   const pathname = usePathname()
-  const isActive = pathname === href && !disabled
+  const isActive = (pathname === href || pathname.startsWith(`${href}/`)) && !disabled
 
   const currentIcon = isActive && activeIcon ? activeIcon : icon
 

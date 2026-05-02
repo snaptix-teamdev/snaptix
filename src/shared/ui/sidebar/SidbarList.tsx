@@ -26,7 +26,7 @@ export const SidebarList = () => {
   return (
     <>
       <Sidebar>
-        <Sidebar.Item href="/home" icon={<HomeIcon />} activeIcon={<HomeActiveIcon />}>
+        <Sidebar.Item href="/feed" icon={<HomeIcon />} activeIcon={<HomeActiveIcon />}>
           Feed
         </Sidebar.Item>
         <Sidebar.Item href="/create" icon={<CreateIcon />} activeIcon={<CreateActiveIcon />}>

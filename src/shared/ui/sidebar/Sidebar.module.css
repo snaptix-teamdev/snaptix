@@ -31,13 +31,18 @@
     border-radius: 2px;
 }
 
+.navItem span:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .navItem:hover {
     color: var(--color-accent-100)
 }
 
 .navItem:focus {
-    outline: 2px solid var(--color-accent-500);
-    outline-offset: -2px;
+    outline: none;
 }
 
 .navItem.active {
@@ -52,7 +57,7 @@
 }
 
 .groupIndent {
-    margin-top: var(--semilarge-indent);
+    margin-top: 34px;
 }
 
 .logout {

@@ -1,0 +1,26 @@
+.container {
+    padding: 35px 0 43px;
+}
+
+.messengerWrapper {
+    margin-top: 13px;
+    width: 100%;
+    height: 79vh;
+    border: 1px solid #333;
+}
+
+.messengerHeader {
+    width: 100%;
+    height: 72px;
+    background-color: #171717;
+    border-bottom: 1px solid #333;
+}
+
+.searchWrapper {
+    width: 269px;
+    height: 72px;
+    border-right: 1px solid #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

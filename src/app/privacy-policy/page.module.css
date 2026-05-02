@@ -1,0 +1,31 @@
+.container {
+    padding: 24px 0;
+}
+
+.buttonBack {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.link {
+    all: unset;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    background: none;
+    border: none;
+    font: inherit;
+    display: inline;
+}
+
+.text {
+    padding: 0 24px;
+    text-align: center;
+}
+
+.title {
+    margin: 24px 0 20px;
+}
