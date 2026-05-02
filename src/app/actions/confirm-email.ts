@@ -1,4 +1,3 @@
-// app/actions/confirm-email.ts
 'use server'
 
 export type ConfirmEmailResult = {
@@ -21,7 +20,6 @@ export async function confirmEmailAction(data: { confirmationCode: string }): Pr
   const responseData = await res.json()
 
   if (!res.ok) {
-    // Проверяем, не подтвержден ли уже email
     if (responseData.errors) {
       const errorMessage = responseData.errors[0]?.message || ''
 
