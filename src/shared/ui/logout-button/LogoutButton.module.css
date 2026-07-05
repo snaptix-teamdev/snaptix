@@ -1,0 +1,29 @@
+.logoutBtn {
+  all: unset;
+  cursor: pointer;
+  min-width: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--semithin-indent);
+  color: var(--color-light-100);
+  font-size: var(--h3-text-size);
+  font-weight: var(--weight-medium);
+  flex-shrink: 0;
+}
+
+.logoutBtn:hover {
+  color: var(--color-accent-100);
+}
+
+.logoutBtn:focus-visible {
+  outline: 2px solid var(--color-accent-500);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.logoutBtn svg {
+  flex-shrink: 0;
+  width: var(--small-indent);
+  height: var(--small-indent);
+}

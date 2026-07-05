@@ -1,0 +1,46 @@
+.wrapper {
+  margin-top: 36px;
+  display: flex;
+  justify-content: flex-start;
+  gap: var(--small-indent);
+}
+
+.sideBar {
+  padding: 38px 0 60px;
+  min-height: calc(100vh - 140px);
+  display: flex;
+  flex-direction: column;
+}
+
+.sideBarOne {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sideBarTwo {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 60px;
+}
+
+.informationBlockWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--medium-indent);
+  flex: 1;
+  position: relative;
+}
+
+.tabs > div {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.sidebarButton {
+  margin-top: auto;
+  padding-left: 8px;
+}

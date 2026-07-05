@@ -1,0 +1,68 @@
+.accountType {
+  margin: 8px 0 42px;
+  padding: 18px;
+  border: 1px solid var(--color-dark-300);
+  background-color: var(--color-dark-500);
+}
+
+.currentSubscription {
+  display: flex;
+  align-items: center;
+  gap: var(--medium-large-indent); /* 45px */
+  margin: 8px 0 13px;
+  padding: 18px;
+  border: 1px solid var(--color-dark-300);
+  background-color: var(--color-dark-500);
+}
+
+.currentSubscriptionInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--semithin-indent); /* 12px */
+}
+
+.currentSubscriptionTitle {
+  color: var(--color-light-900); /* #8D9094 */
+  font-weight: var(--weight-regular); /* 400 */
+  font-size: var(--small-text-size); /* 14px */
+}
+
+.currentSubscriptionDate {
+  color: var(--color-light-100); /* #FFF */
+  font-weight: var(--weight-semibold); /* 600 */
+  font-size: var(--small-text-size); /* 14px */
+}
+
+.checkboxWrapper {
+  margin-bottom: var(--small-indent); /* 24px */
+}
+
+.subscriptions {
+  margin: 8px 0 var(--small-indent); /* 24px */
+  padding: 18px;
+  border: 1px solid var(--color-dark-300);
+  background-color: var(--color-dark-500);
+}
+
+.paymentMethods {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 54px;
+}
+
+.paymentMethodsImg {
+  width: 96px;
+  height: 64px;
+  background-color: var(--color-dark-500);
+  border: 1px solid var(--color-dark-300);
+  border-radius: 5px;
+}
+
+.paymentMethodsImg--small {
+  padding: 8px 12px;
+}
+
+.paymentMethodsImg--large {
+  padding: 14px 12px;
+}

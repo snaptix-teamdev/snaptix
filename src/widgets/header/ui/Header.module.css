@@ -1,0 +1,255 @@
+.container {
+  padding: 0 60px;
+  width: 100%;
+  max-width: 1280px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  color: var(--color-light-300);
+  font-size: 26px;
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+  font-family: var(--font-main), sans-serif;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 62px;
+}
+
+.authActions {
+  display: flex;
+  align-items: center;
+  gap: 56px;
+}
+
+.notificationWrapper {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: var(--color-danger-500);
+  color: var(--color-light-100);
+  font-size: 10px;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--color-dark-700);
+  font-weight: var(--weight-bold);
+  line-height: 1;
+}
+
+.guestActions {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+}
+
+.loginBtn {
+  color: var(--color-accent-500);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+  font-size: 16px;
+  transition: color 0.2s;
+}
+
+.loginBtn:hover {
+  color: var(--color-accent-300);
+}
+
+.langWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* Кастомный селект */
+.customSelect {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  height: 40px;
+  padding: 0 12px;
+  min-width: 130px;
+  border: 1px solid var(--color-dark-100);
+  border-radius: 2px;
+  cursor: pointer;
+  background-color: transparent;
+  transition: all 0.2s ease;
+}
+
+.customSelect:hover {
+  border-color: var(--color-light-900);
+  background-color: rgb(255 255 255 / 5%);
+}
+
+.customSelect.open {
+  border-color: var(--color-accent-500);
+}
+
+.selectedOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-light-300);
+  font-size: 16px;
+  font-weight: var(--weight-regular);
+  font-family: var(--font-main), sans-serif;
+}
+
+/* Контейнер для флага */
+.flagContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.flagIcon {
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+/* Иконка Chevron */
+.chevronIcon {
+  transition: transform 0.2s ease;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.chevronIcon.rotated {
+  transform: rotate(180deg);
+}
+
+/* Выпадающий список */
+.dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background-color: var(--color-dark-700);
+  border: 1px solid var(--color-dark-100);
+  border-radius: 2px;
+  overflow: hidden;
+  z-index: 1000;
+  animation: fade-in 0.2s ease;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  color: var(--color-light-300);
+  font-size: 14px;
+  font-weight: var(--weight-regular);
+  font-family: var(--font-main), sans-serif;
+  transition: background-color 0.2s ease;
+}
+
+.dropdownItem:hover {
+  background-color: rgb(255 255 255 / 10%);
+}
+
+.dropdownItem.active {
+  background-color: var(--color-accent-500);
+  color: white;
+}
+
+.dropdownItem .flagContainer {
+  width: 20px;
+  height: 20px;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (width <= 768px) {
+  .customSelect {
+    height: 36px;
+    padding: 0 10px;
+    min-width: 110px;
+  }
+
+  .selectedOption {
+    font-size: 12px;
+    gap: 6px;
+  }
+
+  .flagContainer {
+    width: 16px;
+    height: 16px;
+  }
+
+  .chevronIcon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .dropdownItem {
+    padding: 6px 10px;
+    font-size: 12px;
+    gap: 6px;
+  }
+
+  .dropdownItem .flagContainer {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* Skeleton-состояние, пока грузится клиентский /me */
+.skeleton {
+  display: inline-block;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--color-dark-300) 25%, var(--color-dark-100) 37%, var(--color-dark-300) 63%);
+  background-size: 400% 100%;
+  animation: skeleton-shimmer 1.4s ease infinite;
+}
+
+.skeletonSelect {
+  width: 60px;
+  height: 36px;
+}
+
+.skeletonBtn {
+  width: 72px;
+  height: 36px;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0 50%;
+  }
+}

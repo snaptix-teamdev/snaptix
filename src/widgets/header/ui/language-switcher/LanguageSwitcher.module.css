@@ -1,0 +1,155 @@
+.langWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.customSelect {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  height: 40px;
+  padding: 0 12px;
+  width: 163px;
+  border: 1px solid var(--color-dark-100);
+  border-radius: 2px;
+  cursor: pointer;
+  background-color: transparent;
+  transition: all 0.2s ease;
+}
+
+.customSelect:hover .selectedOption {
+  color: var(--color-light-900);
+}
+
+.customSelect.open {
+  border: 1px solid var(--color-light-300);
+}
+
+.selectedOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-light-300);
+  font-size: 16px;
+  font-weight: var(--weight-regular);
+  font-family: var(--font-main), sans-serif;
+}
+
+.flagContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.flagIcon {
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.chevronIcon {
+  transition: transform 0.2s ease;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.chevronIcon.rotated {
+  transform: rotate(180deg);
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% - 2px);
+  left: 0;
+  right: 0;
+  background-color: var(--color-dark-700);
+  border: 1px solid var(--color-light-300);
+  border-radius: 2px;
+  overflow: hidden;
+  z-index: 1000;
+  animation: fade-in 0.4s ease;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  color: var(--color-light-300);
+  font-size: 14px;
+  font-weight: var(--weight-regular);
+  font-family: var(--font-main), sans-serif;
+  transition: all 0.2s ease;
+}
+
+.dropdownItem:hover {
+  background-color: var(--color-dark-300);
+  color: var(--color-accent-500);
+}
+
+.dropdownItem.active {
+  background-color: transparent;
+  color: var(--color-light-300);
+}
+
+/* наводим на активный элемент */
+.dropdownItem.active:hover {
+  background-color: var(--color-dark-300);
+  color: var(--color-accent-500);
+}
+
+.dropdownItem .flagContainer {
+  width: 20px;
+  height: 20px;
+}
+
+@media (width <= 768px) {
+  .customSelect {
+    height: 36px;
+    padding: 0 10px;
+    min-width: 110px;
+  }
+
+  .selectedOption {
+    font-size: 12px;
+    gap: 6px;
+  }
+
+  .flagContainer {
+    width: 16px;
+    height: 16px;
+  }
+
+  .chevronIcon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .dropdownItem {
+    padding: 6px 10px;
+    font-size: 12px;
+    gap: 6px;
+  }
+
+  .dropdownItem .flagContainer {
+    width: 16px;
+    height: 16px;
+  }
+}

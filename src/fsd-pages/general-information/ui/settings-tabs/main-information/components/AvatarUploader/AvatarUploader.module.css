@@ -1,0 +1,66 @@
+.userPhotoWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  gap: var(--small-indent);
+}
+
+.avatarContainer {
+  border-radius: 50%;
+  background-color: var(--color-dark-500);
+  width: 205px;
+  height: 205px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.userPhoto {
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.deleteButton {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: var(--color-dark-700);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  z-index: 1;
+}
+
+.deleteButton::before {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--color-danger-500);
+  z-index: -1;
+}
+
+.deleteButton svg {
+  width: 16px;
+  height: 16px;
+  color: var(--color-light-100);
+  position: relative;
+  z-index: 2;
+}
+
+.placeholderIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

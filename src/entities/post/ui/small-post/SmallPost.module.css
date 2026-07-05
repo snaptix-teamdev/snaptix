@@ -1,0 +1,55 @@
+.cardLink {
+  display: flex;
+  cursor: pointer;
+}
+
+.smallCardWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--semithin-indent);
+  padding-top: var(--semithin-indent);
+}
+
+.author {
+  display: flex;
+  align-items: center;
+  gap: var(--semithin-indent);
+}
+
+.avatar {
+  border-radius: 50%;
+}
+
+.time {
+  color: var(--color-light-900);
+  font-size: var(--semithin-indent);
+}
+
+.description {
+  color: var(--color-light-100);
+  font-size: var(--small-text-size);
+}
+
+.description {
+  scrollbar-width: none;
+  overflow-y: auto;
+}
+
+.description::-webkit-scrollbar {
+  display: none;
+}
+
+.collapsed {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.click {
+  padding: 0;
+  height: auto;
+  color: var(--color-accent-500);
+  text-decoration: underline;
+  cursor: pointer;
+}

@@ -1,0 +1,86 @@
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 8px;
+  user-select: none;
+}
+
+.input {
+  position: absolute;
+  opacity: 0;
+}
+
+.boxWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border-radius: 50%;
+}
+
+.box {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--color-light-300);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.icon {
+  color: var(--color-dark-700);
+}
+
+.input:checked + .boxWrapper .box {
+  background: var(--color-light-300);
+  border-color: var(--color-light-300);
+}
+
+.input:checked + .boxWrapper .box .icon {
+  color: var(--color-dark-700);
+}
+
+/* HOVER */
+
+.wrapper:hover .boxWrapper {
+  background: var(--color-dark-100);
+}
+
+/* FOCUS */
+
+.input:focus-visible + .boxWrapper {
+  background: var(--color-dark-700);
+}
+
+/* DISABLED */
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.input:disabled + .boxWrapper .box {
+  background: #2a2a2a;
+  border-color: #444;
+}
+
+/* LABEL */
+
+.label {
+  font-size: 14px;
+  color: #e5e7eb;
+}
+
+.label > a {
+  color: var(--color-accent-500);
+}
+
+.errorText {
+  font-size: 12px;
+  color: var(--color-danger-500);
+}

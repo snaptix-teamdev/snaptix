@@ -1,0 +1,114 @@
+.container {
+  width: 100%;
+  margin: 0 auto;
+  color: var(--color-light-100);
+}
+
+.table {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.tableHeader {
+  display: grid;
+  grid-template-columns: 0.9fr 1.2fr 0.7fr 1fr 0.9fr;
+  padding: 14px 29px;
+  border-bottom: 1px solid var(--color-dark-500);
+  font-size: var(--small-text-size);
+  font-weight: var(--weight-semibold);
+  color: var(--color-light-100);
+  background-color: var(--color-dark-500);
+}
+
+.tableBody {
+  display: flex;
+  flex-direction: column;
+}
+
+.paymentRow {
+  display: grid;
+  grid-template-columns: 0.9fr 1.2fr 0.7fr 1fr 0.9fr;
+  align-items: center;
+  padding: 16px 29px;
+  border-bottom: 1px solid var(--color-dark-500);
+  font-size: var(--small-text-size);
+  font-weight: var(--weight-regular);
+  color: var(--color-light-100);
+}
+
+.dateCell,
+.endDateCell,
+.priceCell,
+.subscriptionCell,
+.paymentTypeCell {
+  color: var(--color-light-100);
+}
+
+.pagination {
+  margin-top: var(--presmall-indent);
+}
+
+@media (width <= 900px) {
+  .tableHeader,
+  .paymentRow {
+    grid-template-columns: 0.8fr 1.1fr 0.6fr 1fr 0.9fr;
+    padding: 13px 19px;
+    gap: 8px;
+  }
+}
+
+@media (width <= 680px) {
+  .tableHeader {
+    display: none;
+  }
+
+  .paymentRow {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--semithin-indent);
+    padding: 16px 19px;
+    border-bottom: 1px solid var(--color-dark-500);
+  }
+
+  .dateCell,
+  .endDateCell,
+  .priceCell,
+  .subscriptionCell,
+  .paymentTypeCell {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .dateCell::before {
+    content: 'Date of Payment:';
+    font-weight: var(--weight-semibold);
+    font-size: var(--small-text-size);
+  }
+
+  .endDateCell::before {
+    content: 'End date of subscription:';
+    font-weight: var(--weight-semibold);
+    font-size: var(--small-text-size);
+  }
+
+  .priceCell::before {
+    content: 'Price:';
+    font-weight: var(--weight-semibold);
+    font-size: var(--small-text-size);
+  }
+
+  .subscriptionCell::before {
+    content: 'Subscription Type:';
+    font-weight: var(--weight-semibold);
+    font-size: var(--small-text-size);
+  }
+
+  .paymentTypeCell::before {
+    content: 'Payment Type:';
+    font-weight: var(--weight-semibold);
+    font-size: var(--small-text-size);
+  }
+}
