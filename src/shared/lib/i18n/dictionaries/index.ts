@@ -61,6 +61,10 @@ export type Dictionary = {
     paymentMethodsStripe: string
     currentDevice: string
     logo: string
+    lastVisit: string
+    loadingDevices: string
+    errorLoadingDevices: string
+    noCurrentDevice: string
     terminateAllSessions: string
     activeSessions: string
     noOtherDevices: string
