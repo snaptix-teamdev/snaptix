@@ -9,6 +9,13 @@
   margin-bottom: var(--small-indent);
 }
 
+.logoDevice,
+.iconDevice {
+  min-width: 40px;
+  color: var(--color-light-900);
+  font-size: var(--regular-text-size);
+}
+
 .terminateButtonWrapper {
   display: flex;
   justify-content: flex-end;
@@ -67,6 +74,17 @@
 .dateDevice {
   font-size: 12px;
   font-weight: var(--weight-regular);
+}
+
+.statusText,
+.errorText {
+  font-size: var(--regular-text-size);
+  font-weight: var(--weight-regular);
+}
+
+.errorText {
+  margin-bottom: var(--small-indent);
+  color: var(--color-danger-500);
 }
 
 .buttonWrapper {
