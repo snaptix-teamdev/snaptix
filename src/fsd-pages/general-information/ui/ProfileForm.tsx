@@ -1,12 +1,18 @@
 'use client'
 
-import { useForm, SubmitHandler, Controller } from 'react-hook-form'
+import { useEffect } from 'react'
+import { useForm, SubmitHandler, Controller, useWatch } from 'react-hook-form'
 import { Button } from '@/shared/ui/button/Button'
 import { Input } from '@/shared/ui/input/Input'
 import { DatePicker } from '@/shared/ui/date-picker/DatePicker'
 import s from './ProfileForm.module.css'
 import { useMeQuery } from '@/shared/api/auth'
 import { useTranslations } from '@/shared/lib/i18n/TranslationsProvider'
+import {
+  useCitiesQuery,
+  useCountriesQuery,
+  useRegionsQuery,
+} from '@/fsd-pages/general-information/api/hooks/use-geo-items-query'
 
 interface IProfileForm {
   username: string
@@ -14,6 +20,7 @@ interface IProfileForm {
   lastName: string
   dateOfBirth: Date | undefined
   country: string
+  region: string
   city: string
   aboutMe: string
 }
@@ -24,6 +31,7 @@ const defaultValues = {
   lastName: '',
   dateOfBirth: undefined,
   country: '',
+  region: '',
   city: '',
   aboutMe: '',
 }
@@ -36,7 +44,8 @@ export default function ProfileForm() {
     register,
     handleSubmit,
     control,
-    formState: { errors, isSubmitting },
+    setValue,
+    formState: { errors, isSubmitting, dirtyFields },
   } = useForm<IProfileForm>({
     defaultValues: defaultValues,
     values: me
@@ -49,6 +58,32 @@ export default function ProfileForm() {
       keepDirtyValues: true,
     },
   })
+
+  const selectedCountryId = useWatch({ control, name: 'country' })
+  const selectedRegionId = useWatch({ control, name: 'region' })
+
+  const { data: countriesData } = useCountriesQuery()
+  const { data: regionsData } = useRegionsQuery(Number(selectedCountryId))
+  const { data: citiesData } = useCitiesQuery(Number(selectedCountryId), Number(selectedRegionId))
+
+  const countries = countriesData?.result || []
+  const regions = regionsData?.result || []
+  const cities = citiesData?.result || []
+
+  // если юзер руками изменил страну -> зануляем регион и город
+  useEffect(() => {
+    if (dirtyFields.country) {
+      setValue('region', '')
+      setValue('city', '')
+    }
+  }, [selectedCountryId, setValue, dirtyFields.country])
+
+  // Если юзер руками изменил регион -> зануляем город
+  useEffect(() => {
+    if (dirtyFields.region) {
+      setValue('city', '')
+    }
+  }, [selectedRegionId, setValue, dirtyFields.region])
 
   const validateAge = (date: Date | undefined) => {
     if (!date) return true
@@ -196,15 +231,31 @@ export default function ProfileForm() {
             className={`${s.select} ${errors.country ? s.selectError : ''}`}
           >
             <option value="">{dict.profileForm.country}</option>
-            <option value="usa">United States</option>
-            <option value="canada">Canada</option>
-            <option value="uk">United Kingdom</option>
-            <option value="germany">Germany</option>
-            <option value="france">France</option>
-            <option value="japan">Japan</option>
-            <option value="australia">Australia</option>
+            {countries.map((country) => (
+              <option key={country.id} value={country.id}>
+                {country.name}
+              </option>
+            ))}
           </select>
           {errors.country && <span className={s.errorMessage}>{errors.country.message}</span>}
+        </div>
+
+        <div className={s.rowItem}>
+          <label className={s.label}>{dict.profileForm.selectYourRegion}</label>
+          <select
+            id="region"
+            {...register('region', { required: dict.profileForm.regionRequired })}
+            className={`${s.select} ${errors.region ? s.selectError : ''}`}
+            disabled={!selectedCountryId}
+          >
+            <option value="">{dict.profileForm.region}</option>
+            {regions.map((region) => (
+              <option key={region.id} value={region.id}>
+                {region.name}
+              </option>
+            ))}
+          </select>
+          {errors.region && <span className={s.errorMessage}>{errors.region.message}</span>}
         </div>
 
         <div className={s.rowItem}>
@@ -213,13 +264,14 @@ export default function ProfileForm() {
             id="city"
             {...register('city', { required: dict.profileForm.cityRequired })}
             className={`${s.select} ${errors.city ? s.selectError : ''}`}
+            disabled={!selectedRegionId}
           >
             <option value="">{dict.profileForm.city}</option>
-            <option value="new-york">New York</option>
-            <option value="los-angeles">Los Angeles</option>
-            <option value="chicago">Chicago</option>
-            <option value="houston">Houston</option>
-            <option value="phoenix">Phoenix</option>
+            {cities.map((city) => (
+              <option key={city.id} value={city.id}>
+                {city.name}
+              </option>
+            ))}
           </select>
           {errors.city && <span className={s.errorMessage}>{errors.city.message}</span>}
         </div>
