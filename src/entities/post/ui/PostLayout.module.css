@@ -1,0 +1,94 @@
+.container {
+  display: flex;
+  flex: 1;
+}
+
+/* МАЛЕНЬКИЙ ПОСТ (Вертикальный) */
+.small {
+  flex-direction: column;
+  max-width: var(--post-width);
+}
+
+.small .mediaSide {
+  position: relative;
+  aspect-ratio: 1 / 1;
+}
+
+/* БОЛЬШОЙ ПОСТ (Горизонтальный) */
+.large {
+  max-width: var(--post-modal-width);
+  max-height: var(--post-modal-height);
+}
+
+.large .mediaSide {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--small-indent);
+}
+
+.large .contentSide {
+  flex: 1;
+  min-width: 0; /* Защита от распирания длинным текстом */
+}
+
+.image {
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+/* В модалке поста показываем изображение целиком, без обрезки */
+.large .image {
+  object-fit: contain;
+}
+
+.controls {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.arrow {
+  position: absolute;
+  border: none;
+  background-color: color-mix(in srgb, var(--color-dark-300), transparent 50%);
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: auto;
+  cursor: pointer;
+  color: var(--color-light-100);
+}
+
+.prevArrow {
+  left: var(--thin-indent);
+}
+
+.nextArrow {
+  right: var(--thin-indent);
+}
+
+.pagination {
+  position: absolute;
+  bottom: var(--prethin-indent);
+  background-color: var(--color-dark-300);
+  border-radius: 2px;
+  padding: var(--thin-indent);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: var(--thin-indent);
+  pointer-events: none;
+}
+
+.dot {
+  width: var(--thin-indent);
+  height: var(--thin-indent);
+  border-radius: 50%;
+  background-color: var(--color-light-100);
+  transition: background 0.3s ease;
+}
+
+.activeDot {
+  background: var(--color-accent-500);
+}

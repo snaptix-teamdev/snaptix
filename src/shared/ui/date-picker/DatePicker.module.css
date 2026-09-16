@@ -1,0 +1,119 @@
+.popover {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px;
+  background: transparent;
+  border: 1px solid var(--color-dark-100);
+  border-radius: 2px;
+  color: var(--color-light-100);
+  font-size: 14px;
+}
+
+.open {
+  background-color: var(--color-dark-500);
+}
+
+.wrapper {
+  width: 100%;
+  display: inline-flex;
+  gap: 5px;
+
+  /* min-width: 160px; */
+  flex-direction: column;
+}
+
+.error {
+  border: 1px solid var(--color-danger-500);
+  color: var(--color-danger-500);
+}
+
+.errorText {
+  color: var(--color-danger-500);
+  padding-left: 6px;
+  font-size: 12px;
+}
+
+.myCalendar {
+  background-color: var(--color-dark-500);
+  border-radius: 8px;
+  border: 1px solid var(--color-dark-300);
+  padding: 8px;
+
+  :global(.rdp-weekday) {
+    text-transform: capitalize;
+  }
+
+  :global(.rdp-button_previous .rdp-chevron),
+  :global(.rdp-button_next .rdp-chevron) {
+    background-color: var(--color-dark-100);
+    border-radius: 50%;
+    padding: 4px;
+    fill: var(--color-light-100) !important;
+  }
+
+  :global(.rdp-day_button:hover) {
+    background-color: var(--color-accent-700);
+    color: var(--color-light-100) !important;
+    cursor: pointer;
+  }
+}
+
+.weekdayDay {
+  color: var(--color-light-100);
+}
+
+.weekendDay {
+  color: var(--color-danger-300);
+}
+
+.selectedDay {
+  background-color: var(--color-accent-900);
+  border-radius: 50%;
+}
+
+.today {
+  color: var(--color-accent-500);
+}
+
+.outsideDay {
+  color: var(--color-light-900);
+}
+
+.navButton {
+  color: var(--color-dark-100);
+}
+
+.navButton:hover {
+  color: var(--color-light-100);
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.8;
+  color: var(--color-light-900);
+  border: 1px solid var(--color-light-900);
+}
+
+.rangeStart {
+  background-color: var(--color-accent-900) !important;
+  color: var(--color-light-100) !important;
+  border-radius: 50% 0 0 50%;
+}
+
+.rangeEnd {
+  background-color: var(--color-accent-900);
+  color: var(--color-light-100);
+  border-radius: 0 50% 50% 0;
+}
+
+.rangeMiddle {
+  background-color: var(--color-accent-900);
+  color: var(--color-light-100);
+  border-radius: 0;
+}
+
+.rangeStart.rangeEnd {
+  border-radius: 50% !important;
+}

@@ -1,0 +1,99 @@
+================================================================================
+                    ИНСТРУКЦИЯ ПО РАБОТЕ С ПЕРЕВОДАМИ (i18n)
+================================================================================
+
+📁 СТРУКТУРА ФАЙЛОВ
+--------------------------------------------------------------------------------
+src/shared/lib/i18n/dictionaries
+  ├── index.ts             ← типы и функция загрузки словарей
+  ├── ru.ts                ← словарь для русского языка
+  ├── en.ts                ← словарь для английского языка
+
+
+src/shared/lib/i18n
+  ├── config.ts            ← конфигурация (доступные языки, cookie name)
+  ├── getLocale.ts         ← функция определения текущего языка
+  └── actions.ts           ← Server Action для записи cookie
+
+
+🚀 КАК ДОБАВИТЬ НОВЫЙ ПЕРЕВОД
+--------------------------------------------------------------------------------
+
+ШАГ 1: Добавь ключ в типы (index.ts):
+
+export type Dictionary = {
+  // ... существующие секции
+  
+  myNewFeature: {
+    title: string
+    description: string
+    button: string
+  }
+}
+
+
+ШАГ 2: Добавь перевод в ru.ts
+
+const dict = {
+  // ... существующие секции
+  
+  myNewFeature: {
+    title: 'Моя новая фича',
+    description: 'Описание моей фичи',
+    button: 'Нажми меня',
+  },
+} as const
+
+
+ШАГ 3: Добавь перевод в en.ts
+
+
+const dict = {
+  // ... существующие секции
+  
+  myNewFeature: {
+    title: 'My New Feature',
+    description: 'Description of my feature',
+    button: 'Click me',
+  },
+} as const
+
+
+💻 КАК ИСПОЛЬЗОВАТЬ ПЕРЕВОДЫ В КОМПОНЕНТАХ
+--------------------------------------------------------------------------------
+
+ВАРИАНТ 1: Серверный компонент
+
+import { getLocale } from '@/shared/lib/i18n/getLocale'
+import { getDictionary } from '@/shared/lib/i18n/dictionaries'
+
+export default async function MyServerComponent() {
+  const locale = await getLocale()
+  const dict = await getDictionary(locale)
+
+  return (
+    <div>
+      <h1>{dict.myNewFeature.title}</h1>
+      <p>{dict.myNewFeature.description}</p>
+      <button>{dict.myNewFeature.button}</button>
+    </div>
+  )
+}
+
+ВАРИАНТ 2: Клиентский компонент
+
+'use client'
+
+import { useTranslations } from '@/shared/lib/i18n/TranslationsProvider'
+
+export default function MyClientComponent() {
+  const dict = useTranslations()
+
+  return (
+    <div>
+      <h1>{dict.myNewFeature.title}</h1>
+      <p>{dict.myNewFeature.description}</p>
+      <button>{dict.myNewFeature.button}</button>
+    </div>
+  )
+}

@@ -1,0 +1,8 @@
+export default function ProfileLayout({ children, modal }: { children: React.ReactNode; modal: React.ReactNode }) {
+  return (
+    <div className="profile-layout">
+      {children}
+      {modal}
+    </div>
+  )
+}

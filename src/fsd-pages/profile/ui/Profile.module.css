@@ -1,0 +1,294 @@
+/* ==================== ОБЁРТКА ==================== */
+.wrapper {
+  margin-top: var(--presmall-indent);
+  display: flex;
+  flex-direction: column;
+  gap: var(--medium-large-indent);
+}
+
+/* ==================== ШАПКА ПРОФИЛЯ ==================== */
+.userInfoWrapper {
+  display: flex;
+  gap: 38px;
+}
+
+.userPhoto {
+  width: 204px;
+  height: 204px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--smaller-indent);
+}
+
+.userNameWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.paidAccountWrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--semithin-indent);
+  font-weight: var(--weight-bold);
+  font-size: var(--page-text-size);
+  line-height: var(--presmall-indent);
+}
+
+.subscriptionsWrapper {
+  display: flex;
+  gap: var(--extralarge-indent);
+}
+
+.subscriptions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--thin-indent);
+  font-size: var(--small-text-size);
+}
+
+.quantity {
+  font-weight: var(--weight-bold);
+  cursor: pointer;
+}
+
+.followers {
+  font-weight: var(--weight-regular);
+  cursor: pointer;
+}
+
+.aboutUser {
+  margin-top: var(--thin-indent);
+  font-weight: var(--weight-regular);
+  font-size: var(--h3-text-size);
+  line-height: var(--small-indent);
+  letter-spacing: 0;
+  color: var(--color-light-700);
+}
+
+/* ==================== СЕТКА ПОСТОВ ==================== */
+.posts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--semithin-indent);
+}
+
+.postItem {
+  width: 234px;
+  height: 228px;
+  border-radius: 0; /* 🔥 Убрали закругление */
+  overflow: hidden;
+  background: var(--color-dark-300);
+  flex-shrink: 0;
+}
+
+.postImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  cursor: pointer;
+}
+
+.postPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--semithin-indent);
+  box-sizing: border-box;
+  color: var(--color-light-900);
+  font-size: var(--small-text-size);
+  text-align: center;
+  background: var(--color-dark-300);
+}
+
+.infiniteLoader,
+.endOfFeed {
+  width: 100%;
+  text-align: center;
+  padding: var(--small-indent);
+  color: var(--color-light-900);
+  font-size: var(--small-text-size);
+  font-style: italic;
+}
+
+.infiniteLoader {
+  color: var(--color-accent-300);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.endOfFeed {
+  color: var(--color-light-700);
+}
+
+.loading,
+.error,
+.empty {
+  width: 100%;
+  text-align: center;
+  padding: var(--small-indent);
+  color: var(--color-light-900);
+  font-size: var(--small-text-size);
+}
+
+.error {
+  color: var(--color-danger-300);
+}
+
+.empty {
+  font-style: italic;
+}
+
+/* ==================== MODAL: ПОДПИСЧИКИ ==================== */
+.container {
+  width: 644px;
+  padding: var(--small-indent);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  background: var(--color-dark-500);
+}
+
+.search {
+  width: 100%;
+  padding: var(--thin-indent) var(--semithin-indent);
+  background-color: var(--color-dark-300);
+  color: var(--color-light-100);
+  border: 1px solid var(--color-dark-100);
+  border-radius: 0; /* 🔥 Убрали закругление для консистентности */
+  flex-shrink: 0;
+  box-sizing: border-box;
+  font-size: var(--small-text-size);
+  font-family: var(--font-main);
+}
+
+.search::placeholder {
+  color: var(--color-light-900);
+}
+
+.followersListWrapper {
+  width: 100%;
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  margin-top: var(--small-indent);
+}
+
+.followersList {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--semithin-indent) 0;
+  border-bottom: 1px solid var(--color-dark-100);
+}
+
+.followersList:last-child {
+  border-bottom: none;
+}
+
+.imgNameFollowerWrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--semithin-indent);
+}
+
+.imgFollower {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.imgNameFollowerWrapper span {
+  font-size: var(--small-text-size);
+  font-weight: var(--weight-regular);
+  color: var(--color-light-100);
+}
+
+.buttonFollowerWrapper {
+  display: flex;
+  gap: var(--semithin-indent);
+}
+
+/* ==================== СКРОЛЛБАР (в дополнение к глобальному) ==================== */
+.followersListWrapper::-webkit-scrollbar {
+  width: 6px;
+}
+
+.followersListWrapper::-webkit-scrollbar-track {
+  background: var(--color-dark-300);
+}
+
+.followersListWrapper::-webkit-scrollbar-thumb {
+  background: var(--color-dark-100);
+  border-radius: 3px;
+}
+
+.followersListWrapper::-webkit-scrollbar-thumb:hover {
+  background: var(--color-light-900);
+}
+
+.sentinel {
+  width: 100%;
+  height: 1px; /* минимальная высота, чтобы элемент существовал в DOM */
+  margin-top: var(--semithin-indent);
+  pointer-events: none; /* не перехватывает клики */
+}
+
+/* Индикатор загрузки */
+.infiniteLoader {
+  width: 100%;
+  text-align: center;
+  padding: var(--small-indent);
+  color: var(--color-light-700);
+  font-size: var(--small-text-size);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Конец ленты */
+.endOfFeed {
+  width: 100%;
+  text-align: center;
+  padding: var(--small-indent);
+  color: var(--color-light-700);
+  font-size: var(--small-text-size);
+}
+
+/* Убедись, что .main-page-all-posts имеет место для скролла */
+.posts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--semithin-indent);
+  min-height: 200px; /* чтобы сентинел мог появиться вьюпорте */
+}

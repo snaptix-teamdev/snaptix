@@ -1,0 +1,22 @@
+.informationBlock {
+  width: 100%;
+  margin-top: var(--small-indent);
+  display: flex;
+  justify-content: start;
+  gap: var(--medium-indent);
+  position: relative;
+}
+
+.informationBlock::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 45px;
+  height: 1px;
+  background-color: var(--color-dark-300);
+}
+
+.userInformation {
+  width: 100%;
+}
