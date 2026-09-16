@@ -96,7 +96,7 @@ const dict = {
     noCurrentDevice: 'Текущее устройство не найдено',
     terminateAllSessions: 'Завершить все остальные сеансы',
     activeSessions: 'Активные сеансы',
-    noOtherDevices: 'Активных сеансов нет',
+    noOtherDevices: 'Вы еще не входили с других устройств',
     dateOfPayment: 'Дата платежа',
     endDateOfSubscription: 'Дата окончания подписки',
     price: 'Цена',

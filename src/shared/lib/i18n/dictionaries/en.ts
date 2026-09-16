@@ -96,7 +96,7 @@ const dict = {
     noCurrentDevice: 'Current device was not found',
     terminateAllSessions: 'Terminate all other session',
     activeSessions: 'Active sessions',
-    noOtherDevices: 'There are no active sessions',
+    noOtherDevices: 'You have not yet logged in from other devices',
     dateOfPayment: 'Date of Payment',
     endDateOfSubscription: 'End date of subscription',
     price: 'Price',

@@ -9,7 +9,6 @@ import {
   useTerminateAllOtherSessionsMutation,
   useTerminateSessionByDeviceIdMutation,
 } from '@/fsd-pages/general-information/api/hooks/use-security-device-mutations'
-import { useLogout } from '@/shared/api/logout/hooks/use-logout-mutation'
 import type { GetActiveDevicesResponseDto } from '@/fsd-pages/general-information/api'
 
 const formatIp = (ip: string | null) => `IP: ${ip ?? '-'}`
@@ -20,15 +19,13 @@ export const Devices = () => {
   const { data: devices = [], isError, isLoading } = useSecurityDevicesQuery()
   const terminateAllOtherSessions = useTerminateAllOtherSessionsMutation()
   const terminateSessionByDeviceId = useTerminateSessionByDeviceIdMutation()
-  const logout = useLogout()
 
   const dateFormatter = useMemo(() => new Intl.DateTimeFormat(locale), [locale])
 
   const currentDevice = devices.find((device) => device.isCurrent)
-  const activeDevices = devices
-  const hasDevices = activeDevices.length > 0
-  const hasOtherDevices = devices.some((device) => !device.isCurrent)
-  const isMutating = terminateAllOtherSessions.isPending || terminateSessionByDeviceId.isPending || logout.isPending
+  const otherDevices = devices.filter((device) => !device.isCurrent)
+  const hasOtherDevices = otherDevices.length > 0
+  const isMutating = terminateAllOtherSessions.isPending || terminateSessionByDeviceId.isPending
 
   const formatLastVisit = (date: string) => {
     const parsedDate = new Date(date)
@@ -40,6 +37,8 @@ export const Devices = () => {
     return `${dict.settings.lastVisit}: ${dateFormatter.format(parsedDate)}`
   }
 
+  const onClickLogout = (deviceId: string) => terminateSessionByDeviceId.mutate(deviceId)
+
   const renderDevice = (device: GetActiveDevicesResponseDto) => (
     <div key={device.deviceId} className={s.activeDevice}>
       <div className={s.iconDevice}>{dict.settings.logo}</div>
@@ -48,17 +47,7 @@ export const Devices = () => {
         <span className={s.ipDevice}>{formatIp(device.ip)}</span>
         <span className={s.dateDevice}>{formatLastVisit(device.lastActiveDate)}</span>
       </div>
-      <LogoutButton
-        disabled={isMutating}
-        onClick={() => {
-          if (device.isCurrent) {
-            logout.mutate()
-            return
-          }
-
-          terminateSessionByDeviceId.mutate(device.deviceId)
-        }}
-      />
+      <LogoutButton disabled={isMutating} onClick={() => onClickLogout(device.deviceId)} />
     </div>
   )
 
@@ -98,8 +87,8 @@ export const Devices = () => {
       <div className={s.deviceList}>
         {isLoading ? (
           <span className={s.notDevices}>{dict.settings.loadingDevices}</span>
-        ) : hasDevices ? (
-          activeDevices.map(renderDevice)
+        ) : hasOtherDevices ? (
+          otherDevices.map(renderDevice)
         ) : (
           <span className={s.notDevices}>{dict.settings.noOtherDevices}</span>
         )}
