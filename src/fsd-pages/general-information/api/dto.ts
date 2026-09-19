@@ -14,3 +14,26 @@ export type GeoItem = {
 export type GetGeoResponseDto = {
   result: GeoItem[]
 }
+
+export type UpdateProfileSettingsRequestDto = {
+  username: string
+  firstName: string
+  lastName: string
+  birthDate: string | null
+  aboutMe: string | null
+  countryId: number | null
+  regionId: number | null
+  cityId: number | null
+}
+
+export type GetProfileSettingsResponseDto = {
+  userId: string
+  username: string
+  firstName: string
+  lastName: string
+  birthDate: string | null
+  aboutMe: string | null
+  country: GeoItem | null
+  region: GeoItem | null
+  city: GeoItem | null
+}

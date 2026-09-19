@@ -1,27 +1,31 @@
 'use client'
 
-import { useEffect } from 'react'
 import { useForm, SubmitHandler, Controller, useWatch } from 'react-hook-form'
 import { Button } from '@/shared/ui/button/Button'
 import { Input } from '@/shared/ui/input/Input'
 import { DatePicker } from '@/shared/ui/date-picker/DatePicker'
 import s from './ProfileForm.module.css'
-import { useMeQuery } from '@/shared/api/auth'
 import { useTranslations } from '@/shared/lib/i18n/TranslationsProvider'
 import {
+  GEO_CITIES_QUERY_KEY,
+  GEO_REGIONS_QUERY_KEY,
   useCitiesQuery,
   useCountriesQuery,
   useRegionsQuery,
-} from '@/fsd-pages/general-information/api/hooks/use-geo-items-query'
+} from '../api/hooks/use-geo-items-query'
+import { useUpdateProfileSettingsMutation } from '../api/hooks/use-update-profile-mutations'
+import type { UpdateProfileSettingsRequestDto } from '../api/dto'
+import { useGetProfileSettingsQuery } from '../api/hooks/use-get-profile-settings'
+import { useQueryClient } from '@tanstack/react-query'
 
 interface IProfileForm {
   username: string
   firstName: string
   lastName: string
-  dateOfBirth: Date | undefined
-  country: string
-  region: string
-  city: string
+  birthDate: Date | undefined
+  countryId: string
+  regionId: string
+  cityId: string
   aboutMe: string
 }
 
@@ -29,38 +33,55 @@ const defaultValues = {
   username: '',
   firstName: '',
   lastName: '',
-  dateOfBirth: undefined,
-  country: '',
-  region: '',
-  city: '',
+  birthDate: undefined,
+  countryId: '',
+  regionId: '',
+  cityId: '',
   aboutMe: '',
 }
 
 export default function ProfileForm() {
-  const { data: me } = useMeQuery()
+  //const { data: me } = useMeQuery() // ранее использовалось для отображения имени пользователя в профиле
   const dict = useTranslations()
+  const queryClient = useQueryClient()
+  const { data: profile } = useGetProfileSettingsQuery()
+  const { mutateAsync: updateProfile } = useUpdateProfileSettingsMutation()
 
   const {
     register,
     handleSubmit,
     control,
-    setValue,
-    formState: { errors, isSubmitting, dirtyFields },
+    formState: { errors, isSubmitting, isValid },
   } = useForm<IProfileForm>({
     defaultValues: defaultValues,
-    values: me
+    mode: 'onChange',
+    values: profile
       ? {
-          ...defaultValues,
-          username: me.username || '',
+          username: profile.username || '',
+          firstName: profile.firstName || '',
+          lastName: profile.lastName || '',
+          aboutMe: profile.aboutMe || '',
+          birthDate: profile.birthDate ? new Date(profile.birthDate) : undefined,
+          countryId: profile.country?.id ? String(profile.country.id) : '',
+          regionId:
+            profile.region?.id && queryClient.getQueryData(GEO_REGIONS_QUERY_KEY(profile.country?.id))
+              ? String(profile.region.id)
+              : '',
+
+          cityId:
+            profile.city?.id && queryClient.getQueryData(GEO_CITIES_QUERY_KEY(profile.country?.id, profile.region?.id))
+              ? String(profile.city.id)
+              : '',
         }
       : undefined,
     resetOptions: {
       keepDirtyValues: true,
+      keepIsValid: false,
     },
   })
 
-  const selectedCountryId = useWatch({ control, name: 'country' })
-  const selectedRegionId = useWatch({ control, name: 'region' })
+  const selectedCountryId = useWatch({ control, name: 'countryId' })
+  const selectedRegionId = useWatch({ control, name: 'regionId' })
 
   const { data: countriesData } = useCountriesQuery()
   const { data: regionsData } = useRegionsQuery(Number(selectedCountryId))
@@ -69,21 +90,6 @@ export default function ProfileForm() {
   const countries = countriesData?.result || []
   const regions = regionsData?.result || []
   const cities = citiesData?.result || []
-
-  // если юзер руками изменил страну -> зануляем регион и город
-  useEffect(() => {
-    if (dirtyFields.country) {
-      setValue('region', '')
-      setValue('city', '')
-    }
-  }, [selectedCountryId, setValue, dirtyFields.country])
-
-  // Если юзер руками изменил регион -> зануляем город
-  useEffect(() => {
-    if (dirtyFields.region) {
-      setValue('city', '')
-    }
-  }, [selectedRegionId, setValue, dirtyFields.region])
 
   const validateAge = (date: Date | undefined) => {
     if (!date) return true
@@ -103,13 +109,29 @@ export default function ProfileForm() {
   }
 
   const onSubmit: SubmitHandler<IProfileForm> = async (data) => {
-    console.log(data)
+    const hasAllGeoIds = Boolean(data.countryId && data.regionId && data.cityId)
+
+    const formattedBirthDate =
+      data.birthDate && !isNaN(data.birthDate.getTime())
+        ? `${data.birthDate.getFullYear()}-${String(data.birthDate.getMonth() + 1).padStart(2, '0')}-${String(data.birthDate.getDate()).padStart(2, '0')}`
+        : null
+    //Эта строка защищает от «сдвига даты на день назад» из-за разницы часовых поясов пользователя и сервера.
+    // Когда вы берете стандартный метод .toISOString(), он принудительно переводит время в формат UTC (нулевой часовой пояс).
+    // Ручная сборка через .getFullYear(), .getMonth() и .getDate() берет локальное время с компьютера пользователя «как есть», вообще игнорируя часовые пояса.
+
+    const requestBody: UpdateProfileSettingsRequestDto = {
+      username: data.username,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      birthDate: formattedBirthDate,
+      aboutMe: data.aboutMe ? data.aboutMe : null,
+      countryId: hasAllGeoIds ? Number(data.countryId) : null,
+      regionId: hasAllGeoIds ? Number(data.regionId) : null,
+      cityId: hasAllGeoIds ? Number(data.cityId) : null,
+    }
+
     try {
-      await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(true)
-        }, 1000)
-      })
+      await updateProfile(requestBody)
       alert(dict.profileForm.settingsSaved)
     } catch (error) {
       alert(dict.profileForm.serverNotAvailable)
@@ -185,7 +207,7 @@ export default function ProfileForm() {
       <div className={s.formGroup}>
         <p className={s.date}>{dict.profileForm.dateOfBirth}</p>
         <Controller
-          name="dateOfBirth"
+          name="birthDate"
           control={control}
           rules={{ validate: validateAge }}
           render={({ field, fieldState: { error } }) => {
@@ -227,8 +249,8 @@ export default function ProfileForm() {
           <label className={s.label}>{dict.profileForm.selectYourCountry}</label>
           <select
             id="country"
-            {...register('country', { required: dict.profileForm.countryRequired })}
-            className={`${s.select} ${errors.country ? s.selectError : ''}`}
+            {...register('countryId', { required: dict.profileForm.countryRequired })}
+            className={`${s.select} ${errors.countryId ? s.selectError : ''}`}
           >
             <option value="">{dict.profileForm.country}</option>
             {countries.map((country) => (
@@ -237,15 +259,15 @@ export default function ProfileForm() {
               </option>
             ))}
           </select>
-          {errors.country && <span className={s.errorMessage}>{errors.country.message}</span>}
+          {errors.countryId && <span className={s.errorMessage}>{errors.countryId.message}</span>}
         </div>
 
         <div className={s.rowItem}>
           <label className={s.label}>{dict.profileForm.selectYourRegion}</label>
           <select
             id="region"
-            {...register('region', { required: dict.profileForm.regionRequired })}
-            className={`${s.select} ${errors.region ? s.selectError : ''}`}
+            {...register('regionId', { required: dict.profileForm.regionRequired })}
+            className={`${s.select} ${errors.regionId ? s.selectError : ''}`}
             disabled={!selectedCountryId}
           >
             <option value="">{dict.profileForm.region}</option>
@@ -255,15 +277,15 @@ export default function ProfileForm() {
               </option>
             ))}
           </select>
-          {errors.region && <span className={s.errorMessage}>{errors.region.message}</span>}
+          {errors.regionId && <span className={s.errorMessage}>{errors.regionId.message}</span>}
         </div>
 
         <div className={s.rowItem}>
           <label className={s.label}>{dict.profileForm.selectYourCity}</label>
           <select
             id="city"
-            {...register('city', { required: dict.profileForm.cityRequired })}
-            className={`${s.select} ${errors.city ? s.selectError : ''}`}
+            {...register('cityId', { required: dict.profileForm.cityRequired })}
+            className={`${s.select} ${errors.cityId ? s.selectError : ''}`}
             disabled={!selectedRegionId}
           >
             <option value="">{dict.profileForm.city}</option>
@@ -273,7 +295,7 @@ export default function ProfileForm() {
               </option>
             ))}
           </select>
-          {errors.city && <span className={s.errorMessage}>{errors.city.message}</span>}
+          {errors.cityId && <span className={s.errorMessage}>{errors.cityId.message}</span>}
         </div>
       </div>
 
@@ -297,7 +319,7 @@ export default function ProfileForm() {
       </div>
 
       <div className={s.buttonWrapper}>
-        <Button type="submit" variant="primary" disabled={isSubmitting} width="auto">
+        <Button type="submit" variant="primary" disabled={isSubmitting || !isValid} width="auto">
           {isSubmitting ? dict.profileForm.saving : dict.profileForm.saveChanges}
         </Button>
       </div>
