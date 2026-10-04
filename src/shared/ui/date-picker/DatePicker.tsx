@@ -70,24 +70,27 @@ export function DatePicker({
   locale = 'ru',
   disabled = false,
 }: DatePickerProps) {
-  const [date, setDate] = useState<Date | DateRange | undefined>(value) //?? new Date()
+  //const [date, setDate] = useState<Date | DateRange | undefined>(value) //?? new Date() - заменен получаемыми данными из react-hook-form
   const [isOpen, setIsOpen] = useState(false)
 
   const handleSelect = (date: Date | DateRange | undefined) => {
     if (!date) return
 
-    setDate(date)
     onChange?.(date)
     // setIsOpen(false)
   }
 
   const formatValue = () => {
+    if (!value) {
+      return mode === 'single' ? 'dd/MM/yyyy' : 'Choose...'
+    }
+
     if (mode === 'single') {
-      return format((date as Date) ?? new Date(), 'dd/MM/yyyy')
+      return format(value as Date, 'dd/MM/yyyy')
     }
 
     if (mode === 'range') {
-      const range = date && typeof date === 'object' && !(date instanceof Date) ? (date as DateRange) : undefined
+      const range = value && typeof value === 'object' && !(value instanceof Date) ? (value as DateRange) : undefined
       const from = format(range?.from ?? new Date(), 'dd/MM/yyyy')
       const to = format(range?.to ?? new Date(), 'dd/MM/yyyy')
       return `${from} - ${to}`
@@ -111,9 +114,9 @@ export function DatePicker({
 
       <Popover.Content align="start" className={`calendar-popover`}>
         {mode === 'single' ? (
-          <DayPicker {...getCommonProps(locale)} mode="single" selected={date as Date} onSelect={handleSelect} />
+          <DayPicker {...getCommonProps(locale)} mode="single" selected={value as Date} onSelect={handleSelect} />
         ) : (
-          <DayPicker {...getCommonProps(locale)} mode="range" selected={date as DateRange} onSelect={handleSelect} />
+          <DayPicker {...getCommonProps(locale)} mode="range" selected={value as DateRange} onSelect={handleSelect} />
         )}
       </Popover.Content>
     </Popover.Root>

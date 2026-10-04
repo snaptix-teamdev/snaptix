@@ -16,17 +16,26 @@ export const useCountriesQuery = () => {
 }
 
 export const useRegionsQuery = (countryId?: number) => {
+  const isValidId = Boolean(countryId && !isNaN(countryId) && countryId !== 0)
+
   return useQuery({
     queryKey: GEO_REGIONS_QUERY_KEY(countryId),
     queryFn: () => getGeoItems(countryId),
-    enabled: !!countryId,
+    enabled: isValidId,
+    placeholderData: isValidId ? undefined : { result: [] },
   })
 }
 
 export const useCitiesQuery = (countryId?: number, regionId?: number) => {
+  const isValidCountry = Boolean(countryId && !isNaN(countryId) && countryId !== 0)
+  const isValidRegion = Boolean(regionId && !isNaN(regionId) && regionId !== 0)
+  const isEnabled = isValidCountry && isValidRegion
+
   return useQuery({
     queryKey: GEO_CITIES_QUERY_KEY(countryId, regionId),
     queryFn: () => getGeoItems(countryId, regionId),
-    enabled: !!countryId && !!regionId,
+    enabled: isEnabled,
+    // Подставляем пустой массив в результат, если запрос заблокирован
+    placeholderData: isEnabled ? undefined : { result: [] },
   })
 }

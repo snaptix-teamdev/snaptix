@@ -6,17 +6,11 @@ import { Input } from '@/shared/ui/input/Input'
 import { DatePicker } from '@/shared/ui/date-picker/DatePicker'
 import s from './ProfileForm.module.css'
 import { useTranslations } from '@/shared/lib/i18n/TranslationsProvider'
-import {
-  GEO_CITIES_QUERY_KEY,
-  GEO_REGIONS_QUERY_KEY,
-  useCitiesQuery,
-  useCountriesQuery,
-  useRegionsQuery,
-} from '../api/hooks/use-geo-items-query'
+import { useCitiesQuery, useCountriesQuery, useRegionsQuery } from '../api/hooks/use-geo-items-query'
 import { useUpdateProfileSettingsMutation } from '../api/hooks/use-update-profile-mutations'
 import type { UpdateProfileSettingsRequestDto } from '../api/dto'
 import { useGetProfileSettingsQuery } from '../api/hooks/use-get-profile-settings'
-import { useQueryClient } from '@tanstack/react-query'
+import { parseIsoDateToLocal } from '@/shared/utils/getParsedIsoDateToLocal'
 
 interface IProfileForm {
   username: string
@@ -43,7 +37,6 @@ const defaultValues = {
 export default function ProfileForm() {
   //const { data: me } = useMeQuery() // ранее использовалось для отображения имени пользователя в профиле
   const dict = useTranslations()
-  const queryClient = useQueryClient()
   const { data: profile } = useGetProfileSettingsQuery()
   const { mutateAsync: updateProfile } = useUpdateProfileSettingsMutation()
 
@@ -51,6 +44,7 @@ export default function ProfileForm() {
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors, isSubmitting, isValid },
   } = useForm<IProfileForm>({
     defaultValues: defaultValues,
@@ -61,17 +55,10 @@ export default function ProfileForm() {
           firstName: profile.firstName || '',
           lastName: profile.lastName || '',
           aboutMe: profile.aboutMe || '',
-          birthDate: profile.birthDate ? new Date(profile.birthDate) : undefined,
+          birthDate: profile.birthDate ? parseIsoDateToLocal(profile.birthDate) : undefined,
           countryId: profile.country?.id ? String(profile.country.id) : '',
-          regionId:
-            profile.region?.id && queryClient.getQueryData(GEO_REGIONS_QUERY_KEY(profile.country?.id))
-              ? String(profile.region.id)
-              : '',
-
-          cityId:
-            profile.city?.id && queryClient.getQueryData(GEO_CITIES_QUERY_KEY(profile.country?.id, profile.region?.id))
-              ? String(profile.city.id)
-              : '',
+          regionId: profile.region?.id ? String(profile.region.id) : '',
+          cityId: profile.city?.id ? String(profile.city.id) : '',
         }
       : undefined,
     resetOptions: {
@@ -82,6 +69,7 @@ export default function ProfileForm() {
 
   const selectedCountryId = useWatch({ control, name: 'countryId' })
   const selectedRegionId = useWatch({ control, name: 'regionId' })
+  const selectedCityId = useWatch({ control, name: 'cityId' })
 
   const { data: countriesData } = useCountriesQuery()
   const { data: regionsData } = useRegionsQuery(Number(selectedCountryId))
@@ -251,6 +239,11 @@ export default function ProfileForm() {
             id="country"
             {...register('countryId', { required: dict.profileForm.countryRequired })}
             className={`${s.select} ${errors.countryId ? s.selectError : ''}`}
+            onChange={(e) => {
+              register('countryId').onChange(e)
+              setValue('regionId', '', { shouldValidate: true, shouldDirty: true })
+              setValue('cityId', '', { shouldValidate: true, shouldDirty: true })
+            }}
           >
             <option value="">{dict.profileForm.country}</option>
             {countries.map((country) => (
@@ -269,6 +262,11 @@ export default function ProfileForm() {
             {...register('regionId', { required: dict.profileForm.regionRequired })}
             className={`${s.select} ${errors.regionId ? s.selectError : ''}`}
             disabled={!selectedCountryId}
+            value={selectedRegionId || ''}
+            onChange={(e) => {
+              register('regionId').onChange(e)
+              setValue('cityId', '', { shouldValidate: true, shouldDirty: true })
+            }}
           >
             <option value="">{dict.profileForm.region}</option>
             {regions.map((region) => (
@@ -287,6 +285,7 @@ export default function ProfileForm() {
             {...register('cityId', { required: dict.profileForm.cityRequired })}
             className={`${s.select} ${errors.cityId ? s.selectError : ''}`}
             disabled={!selectedRegionId}
+            value={selectedCityId || ''}
           >
             <option value="">{dict.profileForm.city}</option>
             {cities.map((city) => (
