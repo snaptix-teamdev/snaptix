@@ -96,6 +96,8 @@ export type Dictionary = {
     dateOfBirth: string
     selectYourCountry: string
     country: string
+    selectYourRegion: string
+    region: string
     selectYourCity: string
     city: string
     aboutMe: string
@@ -114,6 +116,7 @@ export type Dictionary = {
     lastNamePattern: string
     ageValidation: string
     countryRequired: string
+    regionRequired: string
     cityRequired: string
     aboutMeMaxLength: string
     settingsSaved: string
