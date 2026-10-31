@@ -81,10 +81,14 @@
 .postItem {
   width: 234px;
   height: 228px;
+  border: 0;
+  padding: 0;
   border-radius: 0; /* 🔥 Убрали закругление */
   overflow: hidden;
   background: var(--color-dark-300);
   flex-shrink: 0;
+  cursor: pointer;
+  text-align: left;
 }
 
 .postImage {

@@ -9,8 +9,11 @@ export const useDeleteMyPostMutation = () => {
   return useMutation({
     mutationFn: (postId: string) => deleteMyPost(postId),
     mutationKey: ['deletePost'],
-    onSuccess: () => {
-      return queryClient.invalidateQueries({ queryKey: ['posts', 'my'] })
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['posts', 'my'] }),
+        queryClient.invalidateQueries({ queryKey: ['posts', 'user'] }),
+      ])
     },
   })
 }

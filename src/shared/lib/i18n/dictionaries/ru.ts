@@ -61,7 +61,7 @@ const dict = {
     publications: 'Публикации',
     loadingPosts: 'Загрузка постов...',
     errorLoadingPosts: 'Не удалось загрузить посты',
-    noPublications: 'У вас пока нет публикаций',
+    noPublications: 'Публикаций пока нет',
     loading: 'Загрузка...',
     search: 'Поиск',
     follow: 'Подписаться',

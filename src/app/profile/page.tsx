@@ -1,12 +1,18 @@
-import { redirect } from 'next/navigation'
+'use client'
+
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { useAuthStatus } from '@/shared/api/auth'
 
 export default function ProfilePage() {
-  const isAuth = true
-  const currentUserId = 123
+  const router = useRouter()
+  const { user, isLoading } = useAuthStatus()
+  const userId = user?.id
 
-  if (isAuth) {
-    redirect(`/profile/${currentUserId}`)
-  }
+  useEffect(() => {
+    if (isLoading) return
+    router.replace(userId ? `/profile/${userId}` : '/')
+  }, [isLoading, router, userId])
 
-  redirect(`/`)
+  return null
 }

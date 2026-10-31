@@ -5,15 +5,14 @@ import s from './Profile.module.css'
 import Image from 'next/image'
 import defaultPhoto from '@/public/img/defaultPhoto.jpg'
 import { Button } from '@/shared/ui/button/Button'
-import { useAuth } from '@/shared/hooks/useAuth'
+import { useAuthStatus } from '@/shared/api/auth'
 import { PaidAccountIcon } from '@/shared/ui/svg/Icon'
 import { useState, useEffect, useRef } from 'react'
 import Card from '@/shared/ui/card/Card'
 import ava from '@/public/img/defaultPhoto.jpg'
-import { useMyPostsQuery } from '@/features/my-posts/hooks/use-my-posts-query'
-import { useMeQuery } from '@/shared/api/auth/hooks/use-me-query'
+import { useUserPostsQuery } from '@/features/user-posts'
 import { DefaultPostModal } from '@/entities/post/ui/default-post/DefaultPostModal'
-import type { Post } from '@/entities/post/ui/Post.types'
+import type { PostWithOwner } from '@/entities/post/ui/Post.types'
 import { useTranslations } from '@/shared/lib/i18n/TranslationsProvider'
 
 // ==================== TYPES FOR FOLLOWERS ====================
@@ -87,14 +86,15 @@ const createMockFollowers = (baseUsers: SubscribersResponse): SubscribersRespons
   return { ...baseUsers, totalCount: 10, items: newItems }
 }
 
-export const Profile = () => {
+export const Profile = ({ userId }: { userId: string }) => {
   const router = useRouter()
-  const { isAuth } = useAuth()
+  const { user: currentUser } = useAuthStatus()
+  const isOwner = currentUser?.id === userId
   const dict = useTranslations()
 
-  const [activePost, setActivePost] = useState<Post | null>(null)
+  const [activePost, setActivePost] = useState<PostWithOwner | null>(null)
 
-  // 🔥 ХУК: посты текущего пользователя
+  // Публичный запрос использует ID из маршрута и доступен без сессии.
   const {
     data: postsData,
     fetchNextPage,
@@ -102,10 +102,7 @@ export const Profile = () => {
     isLoading: postsLoading,
     isError: postsError,
     isFetchingNextPage,
-  } = useMyPostsQuery({ pageSize: 12 })
-
-  // 🔥 ХУК: данные профиля
-  const { data: me } = useMeQuery()
+  } = useUserPostsQuery(userId, 12)
 
   // 🔥 Ref для элемента-триггера (сентинела)
   const sentinelRef = useRef<HTMLDivElement>(null)
@@ -149,6 +146,9 @@ export const Profile = () => {
   const [isCardOpen, setIsCardOpen] = useState(false)
 
   const allPosts = postsData?.pages.flatMap((page) => page.posts) || []
+  const profileOwner = allPosts[0]?.owner
+  const profileName = (isOwner ? currentUser?.username : null) ?? profileOwner?.username ?? (postsLoading ? '...' : userId)
+  const profileAvatar = profileOwner?.avatar || defaultPhoto
 
   const handleFollowersClick = () => setIsCardOpen(true)
   const handleCloseCard = () => setIsCardOpen(false)
@@ -160,8 +160,8 @@ export const Profile = () => {
       <div className={s.userInfoWrapper}>
         {/* Аватар профиля */}
         <Image
-          src={defaultPhoto}
-          alt={me?.username || dict.profile.userAvatar}
+          src={profileAvatar}
+          alt={profileName}
           width={204}
           height={204}
           className={s.userPhoto}
@@ -171,10 +171,10 @@ export const Profile = () => {
         <div className={s.userInfo}>
           <div className={s.userNameWrapper}>
             <div className={s.paidAccountWrapper}>
-              <span>{me?.username || 'UserName'}</span>
-              {paidAccount && isAuth && <PaidAccountIcon />}
+              <span>{profileName}</span>
+              {paidAccount && isOwner && <PaidAccountIcon />}
             </div>
-            {isAuth && (
+            {isOwner && (
               <Button variant="secondary" width="auto" onClick={onClickHandel}>
                 {dict.profile.profileSettings}
               </Button>
@@ -227,7 +227,7 @@ export const Profile = () => {
 
         {/* Посты */}
         {allPosts.map((post) => (
-          <div key={post.id} className={s.postItem} onClick={() => setActivePost(post)}>
+          <button key={post.id} type="button" className={s.postItem} onClick={() => setActivePost(post)}>
             {post.media?.[0]?.url ? (
               <Image
                 src={post.media[0].url}
@@ -243,7 +243,7 @@ export const Profile = () => {
                 {post.description && post.description.length > 50 ? '...' : ''}
               </div>
             )}
-          </div>
+          </button>
         ))}
 
         {/* 🔥 Сентинел-элемент для Intersection Observer */}
@@ -289,8 +289,9 @@ export const Profile = () => {
       {activePost && (
         <DefaultPostModal
           post={activePost}
-          userName={me?.username || 'UserName'}
-          avatarOwner={ava.src}
+          userName={activePost.owner.username}
+          avatarOwner={activePost.owner.avatar || ava.src}
+          canManage={isOwner && currentUser?.id === activePost.owner.userId}
           onCloseAction={() => setActivePost(null)}
         />
       )}

@@ -157,6 +157,7 @@ export const useCreatePostWizard = (onClose: () => void) => {
         media: uploadResults.map((r) => ({ fileId: r.fileId })),
       })
       queryClient.invalidateQueries({ queryKey: ['posts', 'my'] })
+      queryClient.invalidateQueries({ queryKey: ['posts', 'user'] })
       await revalidateHomePostsAction()
       doReset()
       onClose()

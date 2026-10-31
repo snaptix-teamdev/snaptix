@@ -61,7 +61,7 @@ const dict = {
     publications: 'Publications',
     loadingPosts: 'Loading posts...',
     errorLoadingPosts: 'Failed to load posts',
-    noPublications: 'You have no publications yet',
+    noPublications: 'No publications yet',
     loading: 'Loading...',
     search: 'Search',
     follow: 'Follow',
