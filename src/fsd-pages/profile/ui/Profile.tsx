@@ -293,6 +293,9 @@ export const Profile = ({ userId }: { userId: string }) => {
           avatarOwner={activePost.owner.avatar || ava.src}
           canManage={isOwner && currentUser?.id === activePost.owner.userId}
           onCloseAction={() => setActivePost(null)}
+          onDescriptionSavedAction={(description) => {
+            setActivePost((current) => (current?.id === activePost.id ? { ...current, description } : current))
+          }}
         />
       )}
     </div>

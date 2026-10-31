@@ -172,6 +172,9 @@ const dict = {
     userAvatar: 'User avatar',
     addDescription: 'Add publication description',
     saveChanges: 'Save Changes',
+    saveError: 'Could not save the description. Please try again.',
+    refreshError: 'Description saved, but the post could not be refreshed. Try again.',
+    retryRefresh: 'Retry refresh',
   },
   createPost: {
     addPhoto: 'Add Photo',

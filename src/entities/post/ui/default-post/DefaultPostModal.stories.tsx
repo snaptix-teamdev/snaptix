@@ -23,7 +23,15 @@ const PostDemo = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TranslationsProvider>
-        {isOpen && <DefaultPostModal post={post} userName="Author" onCloseAction={() => setIsOpen(false)} canManage />}
+        {isOpen && (
+          <DefaultPostModal
+            post={post}
+            userName="Author"
+            onCloseAction={() => setIsOpen(false)}
+            onDescriptionSavedAction={() => {}}
+            canManage
+          />
+        )}
       </TranslationsProvider>
     </QueryClientProvider>
   )

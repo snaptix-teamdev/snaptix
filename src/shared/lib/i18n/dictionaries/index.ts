@@ -31,6 +31,9 @@ export type Dictionary = {
     userAvatar: string
     addDescription: string
     saveChanges: string
+    saveError: string
+    refreshError: string
+    retryRefresh: string
   }
   postModal: {
     justNow: string

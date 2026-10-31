@@ -6,6 +6,7 @@ import s from './TextArea.module.css'
 import type { TextAreaProps } from './TextArea.types'
 
 export const TextArea = ({
+  id,
   className,
   placeholder,
   error,
@@ -40,6 +41,7 @@ export const TextArea = ({
   return (
     <div className={s.containerArea}>
       <textarea
+        id={id}
         disabled={disabled}
         className={textAreaClassName}
         ref={textareaRef}

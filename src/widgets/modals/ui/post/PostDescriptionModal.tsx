@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo, useRef } from 'react'
 import { PostLayout } from '@/entities/post/ui/PostLayout'
 import s from './PostDescriptionModal.module.css'
 import Image from 'next/image'
@@ -14,10 +14,13 @@ import type { Post } from '@/entities/post/ui/Post.types'
 import { useMeQuery } from '@/shared/api/auth'
 import defaultAvatar from '@/public/png/userAvatar.png'
 import { useTranslations } from '@/shared/lib/i18n/TranslationsProvider'
+import { revalidateEditedPostAction } from '../../api/revalidate-edited-post'
 
 type PostDescriptionModal = {
   isOpen: boolean
   onCloseAction: () => void
+  onSavedAction: (description: string) => void
+  onServerCacheUpdatedAction?: () => void
   avatarOwner?: string
 } & Post
 
@@ -26,36 +29,69 @@ export const PostDescriptionModal = ({
   id,
   isOpen,
   onCloseAction,
+  onSavedAction,
+  onServerCacheUpdatedAction,
   avatarOwner,
   media,
 }: PostDescriptionModal) => {
   const dict = useTranslations()
   const [currentDescription, setCurrentDescription] = useState(description ?? '')
   const [isConfirmOpen, setIsConfirmOpen] = useState(false)
+  const [lastSavedDescription, setLastSavedDescription] = useState<string | null>(null)
+  const [isRefreshing, setIsRefreshing] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const savingRef = useRef(false)
 
   const { data: me } = useMeQuery()
 
   const { mutateAsync: updatePostDescript, isPending } = useChangePostDescriptMutation()
-  const isNewText = currentDescription !== description
+  const hasUnsavedText = currentDescription !== (lastSavedDescription ?? description ?? '')
+  const needsCacheRefresh = lastSavedDescription !== null
 
   const userAvatar = avatarOwner ? avatarOwner : defaultAvatar
 
   const handleCloseConfirm = useCallback(() => {
-    if (isConfirmOpen) return
+    if (isConfirmOpen || savingRef.current) return
 
-    if (isNewText) {
+    if (hasUnsavedText) {
       setIsConfirmOpen(true)
     } else {
       onCloseAction()
     }
-  }, [onCloseAction, isNewText, isConfirmOpen])
+  }, [onCloseAction, hasUnsavedText, isConfirmOpen])
 
   const handleSaveChangeDescription = async () => {
+    if (savingRef.current || (!hasUnsavedText && !needsCacheRefresh)) return
+    savingRef.current = true
+    setErrorMessage(null)
+
     try {
-      await updatePostDescript({ postId: id, description: currentDescription })
+      if (hasUnsavedText) {
+        try {
+          await updatePostDescript({ postId: id, description: currentDescription })
+        } catch {
+          setErrorMessage(dict.editPost.saveError)
+          return
+        }
+
+        setLastSavedDescription(currentDescription)
+        onSavedAction(currentDescription)
+      }
+
+      setIsRefreshing(true)
+      try {
+        await revalidateEditedPostAction(id)
+      } catch {
+        setErrorMessage(dict.editPost.refreshError)
+        return
+      } finally {
+        setIsRefreshing(false)
+      }
+
       onCloseAction()
-    } catch (error) {
-      console.error('Failed to update description:', error)
+      onServerCacheUpdatedAction?.()
+    } finally {
+      savingRef.current = false
     }
   }
 
@@ -69,11 +105,11 @@ export const PostDescriptionModal = ({
 
   return (
     <>
-      <div className={s.overlay} onClick={(e) => e.stopPropagation}>
+      <div className={s.overlay} onClick={(e) => e.stopPropagation()}>
         <div className={s.modalContent} ref={modalRef} tabIndex={-1}>
           <section className={s.titleBlock}>
             <h1>{dict.editPost.title}</h1>
-            <button className={s.close} onClick={handleCloseConfirm}>
+            <button type="button" className={s.close} onClick={handleCloseConfirm}>
               <CrossWhiteIcon />
             </button>
           </section>
@@ -88,21 +124,31 @@ export const PostDescriptionModal = ({
                   {dict.editPost.addDescription}
                 </label>
                 <TextArea
+                  id="textArea"
                   className={s.area}
                   value={currentDescription}
-                  onValueChangeAction={setCurrentDescription}
+                  onValueChangeAction={(value) => {
+                    setCurrentDescription(value)
+                    setErrorMessage(null)
+                  }}
                   maxLength={500}
                 />
                 <div className={s.charCount}>{currentDescription.length} / 500</div>
               </section>
+              {errorMessage && (
+                <p role="alert" className={s.error}>
+                  {errorMessage}
+                </p>
+              )}
               <div className={s.save}>
                 <Button
+                  type="button"
                   width={'auto'}
                   variant={'primary'}
                   onClick={handleSaveChangeDescription}
-                  disabled={isPending || !isNewText}
+                  disabled={isPending || isRefreshing || (!hasUnsavedText && !needsCacheRefresh)}
                 >
-                  {dict.editPost.saveChanges}
+                  {needsCacheRefresh && !hasUnsavedText ? dict.editPost.retryRefresh : dict.editPost.saveChanges}
                 </Button>
               </div>
             </div>

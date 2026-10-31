@@ -21,6 +21,8 @@ type DefaultPostProps = {
   userName: string
   avatarOwner?: string
   onCloseAction: () => void
+  onDescriptionSavedAction: (description: string) => void
+  onServerCacheUpdatedAction?: () => void
   /** Показывать ли меню управления постом (edit/delete). По умолчанию true (свой пост). */
   canManage?: boolean
 }
@@ -30,6 +32,8 @@ export const DefaultPostModal = ({
   userName,
   avatarOwner,
   onCloseAction,
+  onDescriptionSavedAction,
+  onServerCacheUpdatedAction,
   canManage = true,
 }: DefaultPostProps) => {
   const dict = useTranslations()
@@ -208,6 +212,8 @@ export const DefaultPostModal = ({
             isOpen={isEditOpen}
             avatarOwner={avatarOwner}
             onCloseAction={() => setIsEditOpen(false)}
+            onSavedAction={onDescriptionSavedAction}
+            onServerCacheUpdatedAction={onServerCacheUpdatedAction}
           />
         </div>
       )}
