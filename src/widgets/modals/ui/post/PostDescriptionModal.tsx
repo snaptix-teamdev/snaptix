@@ -41,12 +41,14 @@ export const PostDescriptionModal = ({
   const userAvatar = avatarOwner ? avatarOwner : defaultAvatar
 
   const handleCloseConfirm = useCallback(() => {
+    if (isConfirmOpen) return
+
     if (isNewText) {
       setIsConfirmOpen(true)
     } else {
       onCloseAction()
     }
-  }, [onCloseAction, isNewText])
+  }, [onCloseAction, isNewText, isConfirmOpen])
 
   const handleSaveChangeDescription = async () => {
     try {

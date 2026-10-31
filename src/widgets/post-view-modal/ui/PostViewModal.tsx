@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { DefaultPostModal } from '@/entities/post/ui/default-post/DefaultPostModal'
 import { useAuthStatus } from '@/shared/api/auth'
@@ -33,14 +33,6 @@ export const PostViewModal = ({ post, authorId }: PostViewModalProps) => {
       router.replace(`/profile/${authorId}`)
     }
   }, [router, authorId])
-
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') close()
-    }
-    document.addEventListener('keydown', onKeyDown)
-    return () => document.removeEventListener('keydown', onKeyDown)
-  }, [close])
 
   return (
     <DefaultPostModal

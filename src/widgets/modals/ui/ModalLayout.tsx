@@ -1,6 +1,6 @@
 'use client'
 
-import type { ReactNode, MouseEvent } from 'react'
+import { useEffect, type ReactNode, type MouseEvent } from 'react'
 import { CrossWhiteIcon } from '@/shared/ui/svg/Icon'
 import { Button } from '@/shared/ui/button/Button'
 import { useTranslations } from '@/shared/lib/i18n/TranslationsProvider'
@@ -16,6 +16,18 @@ type Props = {
 
 export const ModalLayout = ({ title, children, onClose, onConfirm, isPending = false }: Props) => {
   const dict = useTranslations()
+
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && !isPending) {
+        e.preventDefault()
+        onClose()
+      }
+    }
+
+    document.addEventListener('keydown', handleEscape)
+    return () => document.removeEventListener('keydown', handleEscape)
+  }, [onClose, isPending])
 
   const handleOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) onClose()

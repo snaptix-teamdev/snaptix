@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import Image from 'next/image'
 import s from './DefaultPostModal.module.css'
@@ -37,6 +37,20 @@ export const DefaultPostModal = ({
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
 
+  useEffect(() => {
+    if (isEditOpen || isDeleteOpen) return
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && !e.defaultPrevented) {
+        e.preventDefault()
+        onCloseAction()
+      }
+    }
+
+    document.addEventListener('keydown', handleEscape)
+    return () => document.removeEventListener('keydown', handleEscape)
+  }, [isEditOpen, isDeleteOpen, onCloseAction])
+
   const toggleLikeHandler = () => setIsLikedByAuthor((prev) => !prev)
 
   const userAvatar = avatarOwner ? avatarOwner : defaultAvatar
@@ -46,9 +60,13 @@ export const DefaultPostModal = ({
   const postImages = post.media?.map((m) => ({ url: m.url, mediaId: m.mediaId }))
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
+    if (e.target === e.currentTarget && !isEditOpen && !isDeleteOpen) {
       onCloseAction()
     }
+  }
+
+  const handleCloseClick = () => {
+    if (!isEditOpen && !isDeleteOpen) onCloseAction()
   }
 
   const mockComments = [
@@ -81,7 +99,7 @@ export const DefaultPostModal = ({
   return (
     <>
       <div className={s.overlay} onClick={handleOverlayClick}>
-        <button className={s.closeOutside} onClick={onCloseAction}>
+        <button className={s.closeOutside} onClick={handleCloseClick}>
           <CrossWhiteIcon />
         </button>
 
