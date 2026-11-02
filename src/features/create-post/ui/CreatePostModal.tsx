@@ -30,7 +30,7 @@ type Props = {
 export const CreatePostModal = ({ open, onCloseAction }: Props) => {
   const dict = useTranslations()
   const wizard = useCreatePostWizard(onCloseAction)
-  const { step, photos, currentPhotoIndex, description, isCloseConfirmOpen, isPublishing } = wizard
+  const { step, photos, currentPhotoIndex, description, isCloseConfirmOpen, isPublishing, publishError } = wizard
 
   const STEP_TITLES = getStepTitles(dict)
 
@@ -155,6 +155,7 @@ export const CreatePostModal = ({ open, onCloseAction }: Props) => {
                 <DescriptionStep
                   photos={photos}
                   description={description}
+                  publishError={publishError}
                   onDescriptionChangeAction={wizard.setDescription}
                 />
               )}

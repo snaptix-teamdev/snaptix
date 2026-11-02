@@ -187,6 +187,7 @@ const dict = {
     next: 'Далее',
     publishing: 'Публикация…',
     publish: 'Опубликовать',
+    publishError: 'Не удалось опубликовать пост. Попробуйте ещё раз.',
     addDescription: 'Добавить описание...',
     preview: 'Превью',
     myProfile: 'Мой профиль',

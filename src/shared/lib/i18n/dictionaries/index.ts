@@ -19,6 +19,7 @@ export type Dictionary = {
     next: string
     publishing: string
     publish: string
+    publishError: string
     addDescription: string
     preview: string
     myProfile: string

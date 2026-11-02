@@ -12,10 +12,11 @@ const MAX_CHARS = 500
 type Props = {
   photos: PhotoItem[]
   description: string
+  publishError: boolean
   onDescriptionChangeAction: (text: string) => void
 }
 
-export const DescriptionStep = ({ photos, description, onDescriptionChangeAction }: Props) => {
+export const DescriptionStep = ({ photos, description, publishError, onDescriptionChangeAction }: Props) => {
   const dict = useTranslations()
   const [currentIndex, setCurrentIndex] = useState(0)
   const { data: me } = useMeQuery()
@@ -59,6 +60,8 @@ export const DescriptionStep = ({ photos, description, onDescriptionChangeAction
           </div>
         </div>
       </div>
+
+      {publishError && <p role="alert" className={s.publishError}>{dict.createPost.publishError}</p>}
 
       {photos.length > 1 && (
         <div className={s.thumbnailStrip}>

@@ -187,6 +187,7 @@ const dict = {
     next: 'Next',
     publishing: 'Publishing…',
     publish: 'Publish',
+    publishError: 'Could not publish the post. Please try again.',
     addDescription: 'Add a description...',
     preview: 'Preview',
     myProfile: 'My Profile',
