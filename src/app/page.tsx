@@ -2,6 +2,7 @@ import s from './page.module.css'
 import { SmallPost } from '@/entities/post/ui/small-post/SmallPost'
 import { getLatestPostsServer, getRegisteredUsersCountServer } from '@/features/main-page-all-posts/api'
 import { RegisteredUsersLabel } from '@/features/main-page-all-posts/ui/RegisteredUsersLabel'
+import { getPostCreatedTime } from '@/shared/utils/getPostCreatedTime'
 
 // SSG + ISR: страница пререндерится на билде (где под сборки достаёт до бэкенда)
 // и ревалидируется раз в 10 минут. В рантайме под отдаёт готовый HTML, не выходя
@@ -39,7 +40,7 @@ export default async function MainPage() {
       </section>
       <section className={s.posts}>
         {posts.map((post) => (
-          <SmallPost key={post.id} {...post} />
+          <SmallPost key={post.id} {...post} initialCreatedTime={getPostCreatedTime(post.createdAt)} />
         ))}
       </section>
     </section>

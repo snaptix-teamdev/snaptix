@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import Image from 'next/image'
@@ -10,11 +10,19 @@ import defaultAvatar from '@/public/png/userAvatar.png'
 import { PostLayout } from '@/entities/post/ui/PostLayout'
 import type { LatestPost } from '@/features/main-page-all-posts/api'
 
-export type SmallPostProps = LatestPost
+export type SmallPostProps = LatestPost & { initialCreatedTime: string }
 
-export const SmallPost = ({ id, media, owner, description, createdAt }: SmallPostProps) => {
+export const SmallPost = ({ id, media, owner, description, createdAt, initialCreatedTime }: SmallPostProps) => {
   const router = useRouter()
   const [isOpenedText, setIsOpenedText] = useState<boolean>(false)
+  const [createdTime, setCreatedTime] = useState(initialCreatedTime)
+
+  useEffect(() => {
+    const updateTime = () => setCreatedTime(getPostCreatedTime(createdAt))
+    updateTime()
+    const intervalId = window.setInterval(updateTime, 60_000)
+    return () => window.clearInterval(intervalId)
+  }, [createdAt, initialCreatedTime])
 
   const isLongText = description ? description.length > 100 : false
   const userAvatar = owner.avatar ? owner.avatar : defaultAvatar
@@ -42,7 +50,7 @@ export const SmallPost = ({ id, media, owner, description, createdAt }: SmallPos
             <Image src={userAvatar} alt={'user avatar'} width={36} height={36} className={s.avatar} />
             <h3>{owner.username}</h3>
           </section>
-          <time className={s.time}>{getPostCreatedTime(createdAt)}</time>
+          <time className={s.time} dateTime={createdAt}>{createdTime}</time>
           <section className={s.description}>
             <div className={`${s.text} ${!isOpenedText ? s.collapsed : ''}`}>{description}</div>
             {isLongText && (
