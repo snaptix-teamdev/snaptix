@@ -54,7 +54,7 @@ const getCommonProps = (localeKey: LocalLanguage) => {
 export type DatePickerProps = {
   mode?: 'single' | 'range'
   value?: Date | DateRange
-  onChange?: (date: Date | DateRange) => void
+  onChange?: (date: Date | DateRange | undefined) => void
   error?: boolean
   errorText?: string
   locale?: LocalLanguage
@@ -74,8 +74,6 @@ export function DatePicker({
   const [isOpen, setIsOpen] = useState(false)
 
   const handleSelect = (date: Date | DateRange | undefined) => {
-    if (!date) return
-
     onChange?.(date)
     // setIsOpen(false)
   }
@@ -114,9 +112,19 @@ export function DatePicker({
 
       <Popover.Content align="start" className={`calendar-popover`}>
         {mode === 'single' ? (
-          <DayPicker {...getCommonProps(locale)} mode="single" selected={value as Date} onSelect={handleSelect} />
+          <DayPicker
+            {...getCommonProps(locale)}
+            mode="single"
+            selected={value as Date | undefined}
+            onSelect={handleSelect}
+          />
         ) : (
-          <DayPicker {...getCommonProps(locale)} mode="range" selected={value as DateRange} onSelect={handleSelect} />
+          <DayPicker
+            {...getCommonProps(locale)}
+            mode="range"
+            selected={value as DateRange | undefined}
+            onSelect={handleSelect}
+          />
         )}
       </Popover.Content>
     </Popover.Root>

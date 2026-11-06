@@ -30,9 +30,10 @@ export const TextArea = ({
 
   const onChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const text = e.target.value
-    if (maxLength && text.length <= maxLength) {
-      onValueChangeAction(text)
+    if (maxLength !== undefined && text.length > maxLength) {
+      return
     }
+    onValueChangeAction(text)
   }
 
   const textAreaClassName = `${s.textArea} ${error ? s.error : ''} ${className || ''}`

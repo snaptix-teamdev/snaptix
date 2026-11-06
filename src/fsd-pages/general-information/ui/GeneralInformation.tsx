@@ -17,9 +17,9 @@ type GeneralInformationProps = {
 export const GeneralInformation = ({ part }: GeneralInformationProps) => {
   console.log(part)
   const dict = useTranslations()
-  const [activeTab, setActiveTab] = useState('general')
-
   const VALID_PARTS = getValidParts(dict)
+
+  const [activeTab, setActiveTab] = useState(() => VALID_PARTS.find(({ id }) => id === part)?.id ?? 'general')
 
   const renderContent = () => {
     switch (activeTab) {
