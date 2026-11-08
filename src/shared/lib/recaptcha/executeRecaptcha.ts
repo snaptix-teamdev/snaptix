@@ -29,7 +29,13 @@ const loadRecaptchaScript = (siteKey: string) => {
     script.async = true
     script.defer = true
     script.onload = () => resolve()
-    script.onerror = () => reject(new Error('Failed to load Google reCAPTCHA script'))
+    script.onerror = () => {
+      // Сбрасываем кэш неуспешной загрузки и убираем битый <script>,
+      // чтобы следующий вызов мог загрузить скрипт заново.
+      scriptPromise = null
+      script.remove()
+      reject(new Error('Failed to load Google reCAPTCHA script'))
+    }
 
     document.head.appendChild(script)
   })

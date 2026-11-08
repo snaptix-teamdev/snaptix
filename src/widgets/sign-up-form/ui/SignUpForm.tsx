@@ -123,11 +123,12 @@ export const SignUpForm = () => {
           }
           error={errors.agree?.message}
         />
+        {errors.root?.message && <p className={s.rootError}>{errors.root.message}</p>}
         <Button variant={'primary'} type="submit" disabled={!isValid || !agreeValue || isPending}>
           {isPending ? 'Loading...' : 'Sign Up'}
         </Button>
         <p>Do you have an account?</p>
-        <Button variant={'ghost'} onClick={() => router.push('/signIn')}>
+        <Button variant={'ghost'} type="button" onClick={() => router.push('/signIn')}>
           Sign In
         </Button>
       </form>

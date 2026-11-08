@@ -27,3 +27,9 @@
   text-decoration: none;
   color: var(--color-light-900);
 }
+
+.rootError {
+  color: var(--color-danger-500);
+  font-size: 12px;
+  text-align: center;
+}
