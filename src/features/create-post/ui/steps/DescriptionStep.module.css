@@ -146,3 +146,7 @@
   object-fit: cover;
   display: block;
 }
+
+.publishError {
+  color: var(--color-danger-300);
+}

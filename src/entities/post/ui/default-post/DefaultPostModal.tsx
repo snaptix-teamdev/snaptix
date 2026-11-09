@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import Image from 'next/image'
 import s from './DefaultPostModal.module.css'
@@ -21,6 +21,8 @@ type DefaultPostProps = {
   userName: string
   avatarOwner?: string
   onCloseAction: () => void
+  onDescriptionSavedAction: (description: string) => void
+  onServerCacheUpdatedAction?: () => void
   /** Показывать ли меню управления постом (edit/delete). По умолчанию true (свой пост). */
   canManage?: boolean
 }
@@ -30,12 +32,28 @@ export const DefaultPostModal = ({
   userName,
   avatarOwner,
   onCloseAction,
+  onDescriptionSavedAction,
+  onServerCacheUpdatedAction,
   canManage = true,
 }: DefaultPostProps) => {
   const dict = useTranslations()
   const [isLikedByAuthor, setIsLikedByAuthor] = useState(false)
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+
+  useEffect(() => {
+    if (isEditOpen || isDeleteOpen) return
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && !e.defaultPrevented) {
+        e.preventDefault()
+        onCloseAction()
+      }
+    }
+
+    document.addEventListener('keydown', handleEscape)
+    return () => document.removeEventListener('keydown', handleEscape)
+  }, [isEditOpen, isDeleteOpen, onCloseAction])
 
   const toggleLikeHandler = () => setIsLikedByAuthor((prev) => !prev)
 
@@ -46,9 +64,13 @@ export const DefaultPostModal = ({
   const postImages = post.media?.map((m) => ({ url: m.url, mediaId: m.mediaId }))
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
+    if (e.target === e.currentTarget && !isEditOpen && !isDeleteOpen) {
       onCloseAction()
     }
+  }
+
+  const handleCloseClick = () => {
+    if (!isEditOpen && !isDeleteOpen) onCloseAction()
   }
 
   const mockComments = [
@@ -81,7 +103,7 @@ export const DefaultPostModal = ({
   return (
     <>
       <div className={s.overlay} onClick={handleOverlayClick}>
-        <button className={s.closeOutside} onClick={onCloseAction}>
+        <button className={s.closeOutside} onClick={handleCloseClick}>
           <CrossWhiteIcon />
         </button>
 
@@ -190,6 +212,8 @@ export const DefaultPostModal = ({
             isOpen={isEditOpen}
             avatarOwner={avatarOwner}
             onCloseAction={() => setIsEditOpen(false)}
+            onSavedAction={onDescriptionSavedAction}
+            onServerCacheUpdatedAction={onServerCacheUpdatedAction}
           />
         </div>
       )}

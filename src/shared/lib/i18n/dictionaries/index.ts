@@ -19,6 +19,7 @@ export type Dictionary = {
     next: string
     publishing: string
     publish: string
+    publishError: string
     addDescription: string
     preview: string
     myProfile: string
@@ -31,6 +32,9 @@ export type Dictionary = {
     userAvatar: string
     addDescription: string
     saveChanges: string
+    saveError: string
+    refreshError: string
+    retryRefresh: string
   }
   postModal: {
     justNow: string

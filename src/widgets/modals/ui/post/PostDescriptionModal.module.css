@@ -77,3 +77,8 @@
   margin-top: auto;
   align-self: flex-end;
 }
+
+.error {
+  margin: 0;
+  color: var(--color-danger-300);
+}

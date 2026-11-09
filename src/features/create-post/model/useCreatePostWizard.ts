@@ -1,10 +1,11 @@
 'use client'
 
-import { useCallback, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import type { Point, Area } from 'react-easy-crop'
 import { uploadPostPhoto, createPost } from '../api'
 import { revalidateHomePostsAction } from '@/features/main-page-all-posts/api/revalidate'
+import { getPhotoFileForUpload } from './cropUtils'
 
 export type WizardStep = 'upload' | 'crop' | 'filters' | 'description'
 
@@ -43,6 +44,8 @@ export const useCreatePostWizard = (onClose: () => void) => {
   const [isCloseConfirmOpen, setIsCloseConfirmOpen] = useState(false)
   const [isPublishing, setIsPublishing] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
+  const [publishError, setPublishError] = useState(false)
+  const publishingRef = useRef(false)
 
   const validateFile = (file: File): string | null => {
     if (file.size > MAX_SIZE_MB * 1024 * 1024 || !ALLOWED_TYPES.includes(file.type.toLowerCase())) {
@@ -104,6 +107,7 @@ export const useCreatePostWizard = (onClose: () => void) => {
     setIsCloseConfirmOpen(false)
     setIsPublishing(false)
     setUploadError(null)
+    setPublishError(false)
   }, [])
 
   const requestClose = useCallback(
@@ -142,26 +146,33 @@ export const useCreatePostWizard = (onClose: () => void) => {
   }, [doReset, onClose])
 
   const publish = useCallback(async () => {
+    if (publishingRef.current) return
+    publishingRef.current = true
     setIsPublishing(true)
+    setPublishError(false)
     try {
-      const uploadResults = await Promise.all(
-        photos.map((p) => {
-          const src = p.croppedSrc ?? p.originalSrc
-          return fetch(src)
-            .then((r) => r.blob())
-            .then((blob) => uploadPostPhoto(new File([blob], 'photo.jpg', { type: 'image/jpeg' })))
-        }),
+      const files = await Promise.all(
+        photos.map((photo) => getPhotoFileForUpload(photo.croppedSrc ?? photo.originalSrc, photo.filterId)),
       )
+      const uploadResults = await Promise.all(files.map(uploadPostPhoto))
       await createPost({
         description,
         media: uploadResults.map((r) => ({ fileId: r.fileId })),
       })
-      queryClient.invalidateQueries({ queryKey: ['posts', 'my'] })
-      await revalidateHomePostsAction()
+      try {
+        void queryClient.invalidateQueries({ queryKey: ['posts', 'my'] })
+        void queryClient.invalidateQueries({ queryKey: ['posts', 'user'] })
+        await revalidateHomePostsAction()
+      } catch (error) {
+        console.error('Post was published, but refreshing the feed failed:', error)
+      }
       doReset()
       onClose()
+    } catch {
+      setPublishError(true)
     } finally {
       setIsPublishing(false)
+      publishingRef.current = false
     }
   }, [photos, description, doReset, onClose, queryClient])
 
@@ -173,6 +184,7 @@ export const useCreatePostWizard = (onClose: () => void) => {
     isCloseConfirmOpen,
     isPublishing,
     uploadError,
+    publishError,
     addPhoto,
     removePhoto,
     setCurrentPhoto: setCurrentPhotoIndex,

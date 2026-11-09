@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect } from 'react'
+import { useCallback, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { DefaultPostModal } from '@/entities/post/ui/default-post/DefaultPostModal'
 import { useAuthStatus } from '@/shared/api/auth'
@@ -20,6 +20,8 @@ type PostViewModalProps = {
 export const PostViewModal = ({ post, authorId }: PostViewModalProps) => {
   const router = useRouter()
   const { user } = useAuthStatus()
+  const [savedPost, setSavedPost] = useState<{ id: string; description: string } | null>(null)
+  const visiblePost = savedPost?.id === post.id ? { ...post, description: savedPost.description } : post
 
   // Меню edit/delete — только автору поста (после клиентского /me).
   const canManage = !!user && user.id === post.owner.userId
@@ -34,20 +36,14 @@ export const PostViewModal = ({ post, authorId }: PostViewModalProps) => {
     }
   }, [router, authorId])
 
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') close()
-    }
-    document.addEventListener('keydown', onKeyDown)
-    return () => document.removeEventListener('keydown', onKeyDown)
-  }, [close])
-
   return (
     <DefaultPostModal
-      post={post}
+      post={visiblePost}
       userName={post.owner.username}
       avatarOwner={post.owner.avatar ?? undefined}
       onCloseAction={close}
+      onDescriptionSavedAction={(description) => setSavedPost({ id: post.id, description })}
+      onServerCacheUpdatedAction={() => router.refresh()}
       canManage={canManage}
     />
   )
