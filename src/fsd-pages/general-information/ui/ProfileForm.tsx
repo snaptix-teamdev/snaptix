@@ -16,7 +16,7 @@ interface IProfileForm {
   username: string
   firstName: string
   lastName: string
-  birthDate: Date | undefined
+  birthDate: Date | null
   countryId: string
   regionId: string
   cityId: string
@@ -27,7 +27,7 @@ const defaultValues = {
   username: '',
   firstName: '',
   lastName: '',
-  birthDate: undefined,
+  birthDate: null,
   countryId: '',
   regionId: '',
   cityId: '',
@@ -55,7 +55,7 @@ export default function ProfileForm() {
           firstName: profile.firstName || '',
           lastName: profile.lastName || '',
           aboutMe: profile.aboutMe || '',
-          birthDate: profile.birthDate ? parseIsoDateToLocal(profile.birthDate) : undefined,
+          birthDate: profile.birthDate ? parseIsoDateToLocal(profile.birthDate) : null,
           countryId: profile.country?.id ? String(profile.country.id) : '',
           regionId: profile.region?.id ? String(profile.region.id) : '',
           cityId: profile.city?.id ? String(profile.city.id) : '',
@@ -147,6 +147,7 @@ export default function ProfileForm() {
               message: dict.profileForm.usernamePattern,
             },
           })}
+          error={errors.username?.message}
         />
       </div>
 
@@ -163,7 +164,7 @@ export default function ProfileForm() {
             required: dict.profileForm.firstNameRequired,
             maxLength: { value: 50, message: dict.profileForm.firstNameMaxLength },
             pattern: {
-              value: /^[a-zA-Za-яА-ЯёЁ]+$/,
+              value: /^[a-zA-Zа-яА-ЯёЁ]+$/,
               message: dict.profileForm.firstNamePattern,
             },
           })}
@@ -184,7 +185,7 @@ export default function ProfileForm() {
             required: dict.profileForm.lastNameRequired,
             maxLength: { value: 50, message: dict.profileForm.lastNameMaxLength },
             pattern: {
-              value: /^[a-zA-Za-яА-ЯёЁ]+$/,
+              value: /^[a-zA-Zа-яА-ЯёЁ]+$/,
               message: dict.profileForm.lastNamePattern,
             },
           })}
@@ -197,14 +198,16 @@ export default function ProfileForm() {
         <Controller
           name="birthDate"
           control={control}
-          rules={{ validate: validateAge }}
+          rules={{
+            validate: (date) => validateAge(date ?? undefined),
+          }}
           render={({ field, fieldState: { error } }) => {
             return (
               <div>
                 <DatePicker
                   mode="single"
-                  value={field.value}
-                  onChange={field.onChange}
+                  value={field.value ?? undefined}
+                  onChange={(date) => field.onChange(date ?? null)}
                   error={!!error}
                   errorText={undefined}
                   locale="en"
