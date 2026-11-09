@@ -55,7 +55,7 @@ export const CreateNewPasswordForm = () => {
             return
           }
 
-          setServerError(error.errors[0]?.message ?? 'Password reset failed. Please try again.')
+          setServerError(error?.errors?.[0]?.message ?? 'Password reset failed. Please try again.')
         },
       },
     )

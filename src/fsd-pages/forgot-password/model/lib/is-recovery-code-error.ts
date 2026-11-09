@@ -1,7 +1,8 @@
 import type { ApiError } from '@/shared/api/baseFetch/baseFetch'
 
 export const isRecoveryCodeError = (error: ApiError) => {
-  return error.errors.some((item) => {
+  // Сетевой сбой приходит нативным TypeError без поля errors — не падаем на нём.
+  return (error?.errors ?? []).some((item) => {
     const code = item.code?.toLowerCase() ?? ''
     const message = item.message?.toLowerCase() ?? ''
     const field = item.field?.toLowerCase() ?? ''

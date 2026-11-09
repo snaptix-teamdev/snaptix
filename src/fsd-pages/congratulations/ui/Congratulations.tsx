@@ -9,7 +9,7 @@ import { useConfirmRegistrationMutation } from '@/fsd-pages/congratulations/api/
 import { useResendVerificationMutation } from '@/fsd-pages/congratulations/api/hooks/use-resend-verification-mutation'
 import s from './Congratulations.module.css'
 
-type Status = 'loading' | 'success' | 'expired' | 'error'
+type Status = 'loading' | 'success' | 'expired' | 'error' | 'resent'
 
 export const Congratulations = () => {
   const searchParams = useSearchParams()
@@ -36,7 +36,9 @@ export const Congratulations = () => {
 
   const { mutate: resend, isPending: isResending } = useResendVerificationMutation({
     onSuccess: () => {
-      setStatus('loading')
+      // Письмо ушло — показываем подтверждение, а не бесконечное «Verifying…»
+      // (нового кода для повторного confirm здесь нет).
+      setStatus('resent')
     },
     onError: () => {
       setStatus('error')
@@ -115,6 +117,27 @@ export const Congratulations = () => {
             alt="Verification link expired"
             width={300}
             height={240}
+            priority
+          />
+        </div>
+      </div>
+    )
+  }
+
+  if (status === 'resent') {
+    return (
+      <div className={s.container}>
+        <div className={s.card}>
+          <h2 className={s.title}>Email sent</h2>
+          <p className={s.description}>
+            We have sent a new verification link to {email || 'your email'}. Please check your inbox.
+          </p>
+          <Image
+            className={s.image}
+            src="/img/email-confirmed.png"
+            alt="Email sent"
+            width={432}
+            height={300}
             priority
           />
         </div>

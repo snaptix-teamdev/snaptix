@@ -75,12 +75,15 @@ export const SignInForm = () => {
         <Link className={s.forgot} href="/forgot-password">
           {dict.signIn.forgotPassword}
         </Link>
+        {errors.root?.message && <p className={s.rootError}>{errors.root.message}</p>}
         <Button variant={'primary'} type="submit" disabled={!isValid || isPending}>
           {dict.signIn.submitButton}
         </Button>
         <p>{dict.signIn.noAccount}</p>
         <Link href="/signup">
-          <Button variant={'ghost'}>{dict.signIn.signUpButton}</Button>
+          <Button variant={'ghost'} type="button">
+            {dict.signIn.signUpButton}
+          </Button>
         </Link>
       </section>
     </form>
