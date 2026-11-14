@@ -155,6 +155,10 @@ export const Profile = ({ userId }: { userId: string }) => {
     isOwner && profileSettings !== undefined
       ? profileSettings.avatarUrl ?? defaultPhoto
       : profileOwner?.avatar ?? defaultPhoto
+  const activePostAvatar =
+    activePost && isOwner && currentUser?.id === activePost.owner.userId && profileSettings !== undefined
+      ? profileSettings.avatarUrl ?? ava.src
+      : activePost?.owner.avatar ?? ava.src
 
   const handleFollowersClick = () => setIsCardOpen(true)
   const handleCloseCard = () => setIsCardOpen(false)
@@ -289,7 +293,7 @@ export const Profile = ({ userId }: { userId: string }) => {
         <DefaultPostModal
           post={activePost}
           userName={activePost.owner.username}
-          avatarOwner={activePost.owner.avatar || ava.src}
+          avatarOwner={activePostAvatar}
           canManage={isOwner && currentUser?.id === activePost.owner.userId}
           onCloseAction={() => setActivePost(null)}
           onDescriptionSavedAction={(description) => {
