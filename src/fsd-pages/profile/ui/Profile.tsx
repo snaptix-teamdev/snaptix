@@ -151,7 +151,10 @@ export const Profile = ({ userId }: { userId: string }) => {
   const profileOwner = allPosts[0]?.owner
   const profileName =
     (isOwner ? currentUser?.username : null) ?? profileOwner?.username ?? (postsLoading ? '...' : userId)
-  const profileAvatar = (isOwner ? profileSettings?.avatarUrl : null) ?? profileOwner?.avatar ?? defaultPhoto
+  const profileAvatar =
+    isOwner && profileSettings !== undefined
+      ? profileSettings.avatarUrl ?? defaultPhoto
+      : profileOwner?.avatar ?? defaultPhoto
 
   const handleFollowersClick = () => setIsCardOpen(true)
   const handleCloseCard = () => setIsCardOpen(false)

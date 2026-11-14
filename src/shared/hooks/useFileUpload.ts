@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 interface UseFileUploadProps {
   validationErrorMessage: string
@@ -22,6 +22,7 @@ export const useFileUpload = ({
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [previewPhoto, setPreviewPhoto] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const selectionIdRef = useRef(0)
 
   const validateFile = (file: File): boolean => {
     const maxSizeInBytes = maxSizeInMB * 1024 * 1024
@@ -39,6 +40,8 @@ export const useFileUpload = ({
   }
 
   const createPreview = (file: File): boolean => {
+    const selectionId = ++selectionIdRef.current
+
     if (!validateFile(file)) {
       setSelectedFile(null)
       setPreviewPhoto(null)
@@ -49,7 +52,9 @@ export const useFileUpload = ({
 
     const reader = new FileReader()
     reader.onloadend = () => {
-      setPreviewPhoto(reader.result as string)
+      if (selectionId !== selectionIdRef.current || typeof reader.result !== 'string') return
+
+      setPreviewPhoto(reader.result)
       setError(null)
     }
     reader.readAsDataURL(file)
@@ -57,6 +62,7 @@ export const useFileUpload = ({
   }
 
   const cancelPreview = (): void => {
+    selectionIdRef.current += 1
     setSelectedFile(null)
     setPreviewPhoto(null)
     setError(null)
