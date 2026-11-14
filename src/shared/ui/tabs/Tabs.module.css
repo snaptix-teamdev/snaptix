@@ -1,0 +1,139 @@
+.tabs {
+  display: flex;
+  width: 100%;
+}
+
+.tab {
+  border-radius: 2px;
+  position: relative;
+  background: none;
+  border: none;
+  color: var(--color-dark-100);
+  font-size: 16px;
+  font-weight: var(--weight-semibold);
+  padding: 12px 8px;
+  cursor: pointer;
+  width: 100%;
+  outline: none;
+}
+
+/* Нижняя полоска у всех */
+.tab::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--color-dark-100);
+  transition: 0.2s;
+}
+
+/* Активная вкладка */
+.active {
+  border: none;
+  background-color: transparent;
+  color: var(--color-accent-500);
+}
+
+.active::after {
+  background: var(--color-accent-500);
+}
+
+/* ---------------------------------------------------- */
+
+/* СОСТОЯНИЯ ДЛЯ НЕАКТИВНЫХ ВКЛАДОК */
+
+/* ---------------------------------------------------- */
+
+/* Hover для неактивных */
+.tab:hover:not(.active, .disabled)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-accent-900);
+  opacity: 0.15;
+  z-index: -1;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* Active (нажатие) для неактивных */
+.tab:active:not(.active, .disabled)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-accent-100);
+  opacity: 0.15;
+  z-index: -1;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* Focus для неактивных */
+.tab:focus-visible:not(.active, .disabled) {
+  border: 2px solid var(--color-accent-700);
+}
+
+/* ---------------------------------------------------- */
+
+/* СОСТОЯНИЯ ДЛЯ АКТИВНОЙ ВКЛАДКИ */
+
+/* ---------------------------------------------------- */
+
+/* Hover для активной */
+.active:hover:not(.disabled)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-accent-900);
+  opacity: 0.15;
+  z-index: -1;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* Active (нажатие) для активной */
+.active:active:not(.disabled)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-accent-100);
+  opacity: 0.15;
+  z-index: -1;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* Focus для активной */
+.tab.active:focus-visible:not(.disabled) {
+  border: 2px solid var(--color-accent-700);
+}
+
+/* ---------------------------------------------------- */
+
+/* DISABLED */
+
+/* ---------------------------------------------------- */
+
+.disabled {
+  color: var(--color-dark-300);
+  cursor: not-allowed;
+}
+
+.disabled::after {
+  background: var(--color-dark-300);
+  opacity: 0.3;
+}
+
+/* Отключаем все эффекты на disabled */
+.disabled:hover::before,
+.disabled:active::before,
+.disabled:focus-visible {
+  display: none;
+}
+
+.disabled:focus-visible {
+  border: none;
+  outline: none;
+}

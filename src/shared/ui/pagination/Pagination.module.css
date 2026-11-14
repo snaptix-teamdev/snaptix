@@ -1,0 +1,70 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: var(--small-indent);
+  flex-wrap: wrap;
+}
+
+.pagination {
+  display: flex;
+  gap: var(--semithin-indent);
+  justify-content: center;
+}
+
+.pageButton {
+  padding: var(--thin-indent) var(--prethin-indent);
+  background-color: inherit;
+  border: none;
+  color: inherit;
+  border-radius: 1px;
+  cursor: pointer;
+}
+
+.pageButton:hover {
+  background-color: var(--color-dark-500);
+  color: var(--color-light-100);
+}
+
+.pageButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-accent-500);
+}
+
+.pageButtonActive {
+  background-color: var(--color-light-100);
+  color: var(--color-dark-100);
+}
+
+.ellipsis {
+  color: var(--color-light-100);
+  user-select: none;
+}
+
+.select {
+  background-color: var(--color-dark-500);
+  border-color: var(--color-dark-300);
+  border-radius: 1px;
+  margin: 0 var(--thin-indent);
+  color: var(--color-light-100);
+}
+
+.arrowButton {
+  border: none;
+  background-color: inherit;
+  color: var(--color-light-100);
+}
+
+.arrowButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-light-100);
+}
+
+.arrowButton:disabled {
+  color: var(--color-dark-100);
+  cursor: not-allowed;
+}

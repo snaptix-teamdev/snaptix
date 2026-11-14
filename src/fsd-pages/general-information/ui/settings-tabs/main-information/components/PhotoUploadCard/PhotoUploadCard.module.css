@@ -1,0 +1,77 @@
+/* components/PhotoUploadCard/PhotoUploadCard.module.css */
+
+.uploadContainer {
+  padding: var(--small-indent) var(--small-indent) var(--prelarge-indent);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.uploadArea {
+  background-color: var(--color-dark-500);
+  margin-bottom: var(--semilarge-indent);
+  width: 222px;
+  height: 228px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.errorImg {
+  margin-bottom: var(--small-indent);
+  width: 445px;
+  height: 60px;
+  padding: 8px var(--small-indent);
+  background-color: var(--color-danger-900);
+  border: 1px solid var(--color-danger-500);
+  text-align: center;
+}
+
+.errorTitle {
+  display: inline;
+  margin-right: 5px;
+  font-size: var(--h3-text-size);
+  font-weight: var(--weight-bold);
+}
+
+.errorText {
+  font-size: var(--h3-text-size);
+  font-weight: var(--weight-regular);
+}
+
+.previewContainer {
+  width: 340px;
+  height: 340px;
+  margin-bottom: 38px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-dark-500);
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.previewImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.previewActions {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}

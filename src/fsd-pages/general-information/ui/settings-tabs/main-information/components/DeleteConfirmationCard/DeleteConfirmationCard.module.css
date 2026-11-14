@@ -1,0 +1,27 @@
+.deleteCardContainer {
+  padding: 30px var(--small-indent) 36px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.deleteText {
+  font-size: var(--h3-text-size);
+  font-weight: var(--weight-regular);
+  color: var(--color-light-100);
+  margin: 0;
+  padding-left: 0;
+}
+
+.deleteError {
+  margin: 12px 0 0;
+  color: var(--color-danger-500);
+  font-size: var(--regular-text-size);
+}
+
+.deleteActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--small-indent);
+  margin-top: auto;
+}

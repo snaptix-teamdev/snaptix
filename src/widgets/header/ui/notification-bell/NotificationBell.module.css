@@ -1,0 +1,28 @@
+.notificationWrapper {
+  position: relative;
+  display: inline-flex; /* Занимает ровно столько места, сколько иконка */
+  cursor: pointer;
+}
+
+.bellIcon {
+  width: 18px; /* Размер иконки */
+  height: 20px;
+  color: white;
+}
+
+.badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background-color: #cc1439;
+  color: white;
+  font-size: 8px;
+  font-weight: 700;
+  min-width: 13px;
+  height: 13px;
+  border-radius: 10px; /* Сделает круглым, а при больших числах — овальным */
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

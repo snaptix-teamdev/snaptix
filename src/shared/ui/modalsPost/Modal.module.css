@@ -1,0 +1,137 @@
+/* Затемнённый фон за модальным окном */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: var(--color-dark-500);
+  opacity: 0.6;
+  z-index: 1000;
+}
+
+/* Контейнер модального окна, центрирован по экрану */
+.content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-dark-300);
+  border: 1px solid var(--color-dark-100);
+  border-radius: 2px;
+}
+
+.content:focus-visible {
+  outline: 2px solid var(--color-accent-500);
+  outline-offset: 2px;
+}
+
+/* ---- Варианты ширины ---- */
+
+.sm {
+  width: min(400px, calc(100vw - 32px));
+}
+
+.md {
+  width: min(540px, calc(100vw - 32px));
+}
+
+.lg {
+  width: min(720px, calc(100vw - 32px));
+}
+
+/* ---- Секции ---- */
+
+/* Шапка с заголовком и кнопкой закрытия */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-dark-100);
+}
+
+.title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--color-light-700);
+}
+
+/* Кнопка закрытия (крестик) */
+.close {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  color: var(--color-light-900);
+  cursor: pointer;
+  transition:
+    background-color 150ms,
+    color 150ms;
+}
+
+.close:hover {
+  background-color: var(--color-dark-500);
+  color: var(--color-light-700);
+}
+
+.close:focus-visible {
+  outline: 2px solid var(--color-accent-500);
+  outline-offset: -2px;
+}
+
+/* Тело модального окна */
+.body {
+  padding: 20px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-light-700);
+}
+
+/* Футер с кнопками действий */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 20px;
+}
+
+/* ---- Анимации ---- */
+
+@keyframes overlay-show {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes content-show {
+  from {
+    opacity: 0;
+    scale: 0.96;
+  }
+
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+/* Отключение анимаций при настройке уменьшения движения */
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .content {
+    animation: none;
+  }
+}
