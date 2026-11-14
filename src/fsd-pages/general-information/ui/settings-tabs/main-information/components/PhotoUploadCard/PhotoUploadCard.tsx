@@ -15,8 +15,8 @@ interface PhotoUploadCardProps {
   error: string | null
   previewPhoto: string | null
   onFileSelectAction: (event: React.ChangeEvent<HTMLInputElement>) => void
-  onSelectClickAction: () => void
-  onSaveAction: () => void
+  onSaveAction: () => Promise<void>
+  isSaving: boolean
 }
 
 export const PhotoUploadCard = ({
@@ -25,19 +25,24 @@ export const PhotoUploadCard = ({
   error,
   previewPhoto,
   onFileSelectAction,
-  onSelectClickAction,
   onSaveAction,
+  isSaving,
 }: PhotoUploadCardProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const dict = useTranslations()
 
   const handleSelectClick = () => {
     fileInputRef.current?.click()
-    onSelectClickAction()
   }
 
   return (
-    <Card width={492} height={564} isOpen={isOpen} onCloseAction={onCloseAction} title={dict.photoUploadCard.addProfilePhoto}>
+    <Card
+      width={492}
+      height={564}
+      isOpen={isOpen}
+      onCloseAction={onCloseAction}
+      title={dict.photoUploadCard.addProfilePhoto}
+    >
       <div className={s.uploadContainer}>
         <div className={s.errorImg} style={{ visibility: error ? 'visible' : 'hidden' }}>
           <span className={s.errorTitle}>{dict.photoUploadCard.error}</span>
@@ -47,11 +52,17 @@ export const PhotoUploadCard = ({
         {previewPhoto ? (
           <>
             <div className={s.previewContainer}>
-              <Image src={previewPhoto} alt={dict.photoUploadCard.preview} width={340} height={340} className={s.previewImage} />
+              <Image
+                src={previewPhoto}
+                alt={dict.photoUploadCard.preview}
+                width={340}
+                height={340}
+                className={s.previewImage}
+              />
             </div>
             <div className={s.previewActions}>
-              <Button variant="primary" width="auto" onClick={onSaveAction}>
-                {dict.photoUploadCard.save}
+              <Button variant="primary" width="auto" onClick={onSaveAction} disabled={isSaving}>
+                {isSaving ? dict.photoUploadCard.saving : dict.photoUploadCard.save}
               </Button>
             </div>
           </>
@@ -62,7 +73,7 @@ export const PhotoUploadCard = ({
               <input
                 ref={fileInputRef}
                 type="file"
-                accept="image/jpeg,image/jpg,image/png"
+                accept="image/jpeg,image/png"
                 onChange={onFileSelectAction}
                 className={s.hiddenInput}
               />

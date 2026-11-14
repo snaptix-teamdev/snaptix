@@ -1,43 +1,36 @@
 import { useState } from 'react'
 
 interface UseFileUploadProps {
+  validationErrorMessage: string
   maxSizeInMB?: number
   allowedFormats?: string[]
 }
 
 interface UseFileUploadReturn {
-  profilePhoto: string | null
+  selectedFile: File | null
   previewPhoto: string | null
   error: string | null
-  setProfilePhoto: (photo: string | null) => void
-  setPreviewPhoto: (photo: string | null) => void
-  validateFile: (file: File) => boolean
   createPreview: (file: File) => boolean
-  savePhoto: () => void
   cancelPreview: () => void
-  clearError: () => void
 }
 
 export const useFileUpload = ({
-  maxSizeInMB = 3,
-  allowedFormats = ['image/jpeg', 'image/jpg', 'image/png'],
-}: UseFileUploadProps = {}): UseFileUploadReturn => {
-  const [profilePhoto, setProfilePhoto] = useState<string | null>(null)
+  validationErrorMessage,
+  maxSizeInMB = 10,
+  allowedFormats = ['image/jpeg', 'image/png'],
+}: UseFileUploadProps): UseFileUploadReturn => {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [previewPhoto, setPreviewPhoto] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   const validateFile = (file: File): boolean => {
     const maxSizeInBytes = maxSizeInMB * 1024 * 1024
-
-    if (file.size > maxSizeInBytes) {
-      setError(`Photo size should not exceed ${maxSizeInMB} MB`)
-      return false
-    }
-
     const fileType = file.type.toLowerCase()
+    const hasValidSize = file.size <= maxSizeInBytes
+    const hasValidFormat = allowedFormats.includes(fileType)
 
-    if (!allowedFormats.includes(fileType)) {
-      setError('The format of the uploaded photo must be PNG and JPEG')
+    if (!hasValidSize || !hasValidFormat) {
+      setError(validationErrorMessage)
       return false
     }
 
@@ -47,8 +40,12 @@ export const useFileUpload = ({
 
   const createPreview = (file: File): boolean => {
     if (!validateFile(file)) {
+      setSelectedFile(null)
+      setPreviewPhoto(null)
       return false
     }
+
+    setSelectedFile(file)
 
     const reader = new FileReader()
     reader.onloadend = () => {
@@ -59,33 +56,17 @@ export const useFileUpload = ({
     return true
   }
 
-  const savePhoto = (): void => {
-    if (previewPhoto) {
-      setProfilePhoto(previewPhoto)
-      setPreviewPhoto(null)
-      setError(null)
-    }
-  }
-
   const cancelPreview = (): void => {
+    setSelectedFile(null)
     setPreviewPhoto(null)
     setError(null)
   }
 
-  const clearError = (): void => {
-    setError(null)
-  }
-
   return {
-    profilePhoto,
+    selectedFile,
     previewPhoto,
     error,
-    setProfilePhoto,
-    setPreviewPhoto,
-    validateFile,
     createPreview,
-    savePhoto,
     cancelPreview,
-    clearError,
   }
 }
