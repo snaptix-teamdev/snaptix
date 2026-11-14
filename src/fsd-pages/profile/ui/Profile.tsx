@@ -14,6 +14,7 @@ import { useUserPostsQuery } from '@/features/user-posts'
 import { DefaultPostModal } from '@/entities/post/ui/default-post/DefaultPostModal'
 import type { PostWithOwner } from '@/entities/post/ui/Post.types'
 import { useTranslations } from '@/shared/lib/i18n/TranslationsProvider'
+import { useGetProfileSettingsQuery } from '@/fsd-pages/general-information/api/hooks/use-get-profile-settings'
 
 // ==================== TYPES FOR FOLLOWERS ====================
 export interface Avatar {
@@ -91,6 +92,7 @@ export const Profile = ({ userId }: { userId: string }) => {
   const { user: currentUser } = useAuthStatus()
   const isOwner = currentUser?.id === userId
   const dict = useTranslations()
+  const { data: profileSettings } = useGetProfileSettingsQuery(isOwner)
 
   const [activePost, setActivePost] = useState<PostWithOwner | null>(null)
 
@@ -147,8 +149,9 @@ export const Profile = ({ userId }: { userId: string }) => {
 
   const allPosts = postsData?.pages.flatMap((page) => page.posts) || []
   const profileOwner = allPosts[0]?.owner
-  const profileName = (isOwner ? currentUser?.username : null) ?? profileOwner?.username ?? (postsLoading ? '...' : userId)
-  const profileAvatar = profileOwner?.avatar || defaultPhoto
+  const profileName =
+    (isOwner ? currentUser?.username : null) ?? profileOwner?.username ?? (postsLoading ? '...' : userId)
+  const profileAvatar = (isOwner ? profileSettings?.avatarUrl : null) ?? profileOwner?.avatar ?? defaultPhoto
 
   const handleFollowersClick = () => setIsCardOpen(true)
   const handleCloseCard = () => setIsCardOpen(false)
@@ -159,14 +162,7 @@ export const Profile = ({ userId }: { userId: string }) => {
       {/* ==================== HEADER ПРОФИЛЯ ==================== */}
       <div className={s.userInfoWrapper}>
         {/* Аватар профиля */}
-        <Image
-          src={profileAvatar}
-          alt={profileName}
-          width={204}
-          height={204}
-          className={s.userPhoto}
-          priority
-        />
+        <Image src={profileAvatar} alt={profileName} width={204} height={204} className={s.userPhoto} priority />
 
         <div className={s.userInfo}>
           <div className={s.userNameWrapper}>
