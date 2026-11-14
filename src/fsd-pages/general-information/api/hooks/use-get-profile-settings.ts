@@ -5,9 +5,10 @@ import { getProfileSettings } from '@/fsd-pages/general-information/api'
 
 export const USER_PROFILE_QUERY_KEY = ['user', 'profile'] as const
 
-export const useGetProfileSettingsQuery = () => {
+export const useGetProfileSettingsQuery = (enabled = true) => {
   return useQuery({
     queryKey: USER_PROFILE_QUERY_KEY,
     queryFn: getProfileSettings,
+    enabled,
   })
 }

@@ -153,7 +153,18 @@ const dict = {
     error: 'Error!',
     preview: 'Preview',
     save: 'Save',
+    saving: 'Saving...',
     selectFromComputer: 'Select from Computer',
+    validationError: 'The photo must be less than 10 Mb and have JPEG or PNG format',
+    uploadError: 'Could not save the photo. Please try again.',
+  },
+  deletePhotoCard: {
+    title: 'Delete Photo',
+    confirmation: 'Do you really want to delete your profile photo?',
+    no: 'No',
+    yes: 'Yes',
+    deleting: 'Deleting...',
+    deleteError: 'Could not delete the photo. Please try again.',
   },
   profileModal: {
     createPost: 'Create Post',

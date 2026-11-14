@@ -143,7 +143,18 @@ export type Dictionary = {
     error: string
     preview: string
     save: string
+    saving: string
     selectFromComputer: string
+    validationError: string
+    uploadError: string
+  }
+  deletePhotoCard: {
+    title: string
+    confirmation: string
+    no: string
+    yes: string
+    deleting: string
+    deleteError: string
   }
   profileModal: {
     createPost: string

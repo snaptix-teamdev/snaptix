@@ -153,7 +153,18 @@ const dict = {
     error: 'Ошибка!',
     preview: 'Превью',
     save: 'Сохранить',
+    saving: 'Сохранение...',
     selectFromComputer: 'Выбрать с компьютера',
+    validationError: 'Фотография должна быть меньше 10 МБ и иметь формат JPEG или PNG',
+    uploadError: 'Не удалось сохранить фотографию. Попробуйте ещё раз.',
+  },
+  deletePhotoCard: {
+    title: 'Удалить фото',
+    confirmation: 'Вы действительно хотите удалить фотографию профиля?',
+    no: 'Нет',
+    yes: 'Да',
+    deleting: 'Удаление...',
+    deleteError: 'Не удалось удалить фотографию. Попробуйте ещё раз.',
   },
   profileModal: {
     createPost: 'Создать пост',
