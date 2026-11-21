@@ -4,9 +4,12 @@ import { fileURLToPath } from 'url'
 import { FlatCompat } from '@eslint/eslintrc'
 import storybook from 'eslint-plugin-storybook'
 
-// Импортируем парсер и плагин TypeScript (они уже установлены)
+// Импортируем парсер и плагин TypeScript
 import tsParser from '@typescript-eslint/parser'
 import tsPlugin from '@typescript-eslint/eslint-plugin'
+
+// Импортируем плагин React Hooks
+import reactHooks from 'eslint-plugin-react-hooks'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -27,15 +30,22 @@ export default [
         ecmaFeatures: {
           jsx: true,
         },
-        project: './tsconfig.json', // Убедитесь, что файл существует
       },
     },
     plugins: {
       '@typescript-eslint': tsPlugin,
+      'react-hooks': reactHooks,
     },
     rules: {
       // Базовые правила TypeScript
       ...tsPlugin.configs.recommended.rules,
+
+      // Правила React Hooks
+      ...reactHooks.configs.recommended.rules,
+
+      // Отключаем несуществующие правила, которые вызывают ошибки
+      'react-hooks/set-state-in-effect': 'off',
+      'react-hooks/incompatible-library': 'off',
     },
   },
 
@@ -50,6 +60,16 @@ export default [
 
   // 5. Глобальные игнорируемые паттерны
   {
-    ignores: ['.next/**', 'out/**', 'build/**', 'node_modules/**', 'next-env.d.ts', '*.config.js', '*.config.mjs'],
+    ignores: [
+      '.next/**',
+      'out/**',
+      'build/**',
+      'node_modules/**',
+      'next-env.d.ts',
+      '*.config.js',
+      '*.config.mjs',
+      'dist/**',
+      'coverage/**',
+    ],
   },
 ]

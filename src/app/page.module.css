@@ -1,0 +1,34 @@
+.content {
+  padding-top: var(--small-indent);
+}
+
+.counter {
+  border: 1px solid var(--color-dark-300);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--small-indent);
+}
+
+.digits {
+  border: 1px solid var(--color-dark-300);
+  border-radius: 2px;
+  display: flex;
+  padding: var(--semithin-indent);
+}
+
+.digit {
+  font-size: var(--small-indent);
+  padding: var(--semithin-indent);
+}
+
+.digit:not(:last-child) {
+  border-right: 1px solid var(--color-dark-300);
+}
+
+.posts {
+  margin-top: var(--presmall-indent);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--semithin-indent);
+}
